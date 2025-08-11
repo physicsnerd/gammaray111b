@@ -1,0 +1,12 @@
+2025-07-15T14:58:29|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T14:58:29|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T14:59:11|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 342, in start_stop
+    self._start()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 177, in _start
+    raise RuntimeError(msg)
+RuntimeError: Cannot start a new measurement while still measuring <ScopeFoundry.measurement.MeasurementQThread object at 0x0000017DE8DC4440> True
+
+2025-07-15T14:59:21|INFO|FancyApp|on_close
+2025-07-15T14:59:21|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T14:59:21|INFO|FancyApp|disconnecting ads

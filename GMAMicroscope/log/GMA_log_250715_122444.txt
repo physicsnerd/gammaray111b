@@ -1,0 +1,14 @@
+2025-07-15T12:24:47|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T12:24:47|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T12:24:55|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 39, in run
+    raise NotImplementedError
+NotImplementedError
+
+2025-07-15T12:25:41|INFO|FancyApp|on_close
+2025-07-15T12:25:41|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T12:25:41|INFO|FancyApp|disconnecting ads

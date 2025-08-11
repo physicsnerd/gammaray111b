@@ -1,0 +1,16 @@
+2025-07-11T17:29:08|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 121, in enable_connection
+    raise err
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 117, in enable_connection
+    self.disconnect()
+  File "<stdin>", line 5, in disconnect
+AttributeError: 'ads' object has no attribute 'device_data'
+
+2025-07-11T17:29:08|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 121, in enable_connection
+    raise err
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 117, in enable_connection
+    self.disconnect()
+  File "<stdin>", line 5, in disconnect
+AttributeError: 'ads' object has no attribute 'device_data'
+

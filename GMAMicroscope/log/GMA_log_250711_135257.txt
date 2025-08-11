@@ -1,0 +1,12 @@
+2025-07-11T13:52:57|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 50, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 23, in setup
+    from ScopeFoundryHW.ADS import ADSHardware
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\ScopeFoundryHW\ADS.py", line 5, in <module>
+    from WF_SDK import device
+ModuleNotFoundError: No module named 'WF_SDK'
+

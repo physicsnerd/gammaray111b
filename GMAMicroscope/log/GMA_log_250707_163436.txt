@@ -1,0 +1,161 @@
+2025-07-07T16:34:38|INFO|FancyApp|proposed values default_settings.ini
+2025-07-07T16:34:38|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-07T16:34:40|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:34:40|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:34:40|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:45|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:46|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:47|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:48|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:49|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:50|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:51|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:52|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:53|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:54|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:55|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:56|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:34:56|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:13|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:38:13|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:38:13|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:20|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:21|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T16:38:22|WARNING|LoggedQuantity|dac_val read_from_hardware called when not connected to hardware
+2025-07-07T18:27:16|INFO|FancyApp|on_close
+2025-07-07T18:27:16|INFO|FancyApp|disconnecting ni_dac

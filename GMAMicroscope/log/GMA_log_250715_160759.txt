@@ -1,0 +1,19 @@
+2025-07-15T16:08:01|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 24, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 21, in setup
+    self.add_measurement(ScopeRead(self))
+                         ^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 126, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\scope_read.py", line 27, in setup
+    self.data = {"y": np.ones(self.settings["sampling_period"])}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\numpy\core\numeric.py", line 191, in ones
+    a = empty(shape, dtype, order)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected a sequence of integers or a single integer, got '60.0'
+

@@ -1,0 +1,46 @@
+2025-07-15T14:36:07|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T14:36:07|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T14:38:40|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 342, in start_stop
+    self._start()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 177, in _start
+    raise RuntimeError(msg)
+RuntimeError: Cannot start a new measurement while still measuring <ScopeFoundry.measurement.MeasurementQThread object at 0x000001C10E684710> True
+
+2025-07-15T14:39:36|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-15T14:39:36|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-15T14:39:36|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+2025-07-15T14:39:39|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 34, in run
+    self.run_ads()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 39, in run_ads
+    hw.open_scope()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\ScopeFoundryHW\ADS.py", line 28, in open_scope
+    scope.open(self.handle, buffer_size=buffer_size, sampling_frequency=sample_freq)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\WF_SDK\scope.py", line 63, in open
+    check_error()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\WF_SDK\device.py", line 229, in check_error
+    raise error(err_msg, err_func, err_inst)
+WF_SDK.device.error: Error: scope -> open -> Invalid device handle provided
+
+
+2025-07-15T14:44:38|INFO|FancyApp|on_close
+2025-07-15T14:44:38|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T14:44:38|INFO|FancyApp|disconnecting ads

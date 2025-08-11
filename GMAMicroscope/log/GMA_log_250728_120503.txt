@@ -1,0 +1,18 @@
+2025-07-28T12:05:04|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 24, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 15, in setup
+    self.add_hardware(ADSHardware(self))
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 75, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\ScopeFoundryHW\ADS.py", line 20, in setup
+    self.handle = device.open()
+                  ^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\WF_SDK\device.py", line 167, in open
+    raise error("There are no connected devices", "open", "device")
+WF_SDK.device.error: Error: device -> open -> There are no connected devices
+

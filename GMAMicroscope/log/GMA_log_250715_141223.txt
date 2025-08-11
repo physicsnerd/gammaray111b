@@ -1,0 +1,17 @@
+2025-07-15T14:12:26|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T14:12:26|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T14:12:31|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 36, in run
+    self.run_ads()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 59, in run_ads
+    log(self.data["y"])
+    ^^^
+NameError: name 'log' is not defined. Did you mean: 'self.log'?
+
+2025-07-15T14:13:07|INFO|FancyApp|on_close
+2025-07-15T14:13:07|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T14:13:07|INFO|FancyApp|disconnecting ads

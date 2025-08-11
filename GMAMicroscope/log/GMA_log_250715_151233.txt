@@ -1,0 +1,2 @@
+2025-07-15T15:12:35|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T15:12:35|INFO|FancyApp|settings loaded from default_settings.ini

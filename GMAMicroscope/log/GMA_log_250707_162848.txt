@@ -1,0 +1,31 @@
+2025-07-07T16:28:49|INFO|FancyApp|proposed values default_settings.ini
+2025-07-07T16:28:49|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-07T16:28:51|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:28:51|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: Dev1
+
+Task Name: ni_dac
+Status Code: -200220
+2025-07-07T16:28:51|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+2025-07-07T16:28:59|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 43, in run
+    y[i] = hw.settings.get_lq("sine_data").read_from_hardware()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\logged_quantity\collection.py", line 178, in get_lq
+    return self._logged_quantities[key]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'sine_data'
+

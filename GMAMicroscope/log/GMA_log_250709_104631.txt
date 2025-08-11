@@ -1,0 +1,15 @@
+2025-07-09T10:46:33|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 50, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 24, in setup
+    self.add_hardware(ADSHardware(self))
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 75, in __init__
+    self.setup()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\hardware.py", line 274, in setup
+    raise NotImplementedError()
+NotImplementedError
+

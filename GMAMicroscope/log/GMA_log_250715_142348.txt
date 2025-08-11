@@ -1,0 +1,17 @@
+2025-07-15T14:23:52|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T14:23:52|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T14:24:07|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 35, in run
+    self.run_ads()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\pulse_height.py", line 52, in run_ads
+    values.append(int((height - base) * bin_range))
+                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'float' and 'LoggedQuantity'
+
+2025-07-15T14:26:16|INFO|FancyApp|on_close
+2025-07-15T14:26:16|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T14:26:16|INFO|FancyApp|disconnecting ads

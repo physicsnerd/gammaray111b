@@ -1,0 +1,78 @@
+2025-07-07T13:47:16|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\tools\fancy_app.py", line 67, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\tools\fancy_app.py", line 46, in setup
+    self.add_measurement(Example2DSlowScanMeasure(self, actuators=actuators))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\scanning\base_raster_slow_scan_v2.py", line 33, in __init__
+    super().__init__(
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\scanning\base_raster_scan.py", line 51, in __init__
+    Measurement.__init__(self, app)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 126, in __init__
+    self.setup()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\scanning\base_raster_slow_scan_v2.py", line 50, in setup
+    super().setup()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\scanning\base_raster_scan.py", line 55, in setup
+    self.ui: Ui_SimpleXYScanWindow = load_qt_ui_file(self.base_ui_filename)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\helper_funcs.py", line 91, in load_qt_ui_file
+    ui = uic.loadUi(ui_filename)
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\__init__.py", line 241, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\Loader\loader.py", line 66, in loadUi
+    return self.parse(filename, resource_suffix)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 1037, in parse
+    actor(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 828, in createUserInterface
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 273, in createWidget
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 503, in createLayout
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 546, in handleItem
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 503, in createLayout
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 546, in handleItem
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 273, in createWidget
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 503, in createLayout
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 546, in handleItem
+    self.traverseWidgetTree(elem)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 806, in traverseWidgetTree
+    handler(self, child)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 264, in createWidget
+    self.stack.push(self.setupObject(widget_class, parent, elem))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\uiparser.py", line 230, in setupObject
+    self.wprops.setProperties(obj, branch)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\properties.py", line 413, in setProperties
+    getattr(self, prop_name)(widget, prop)
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyQt5\uic\properties.py", line 498, in orientation
+    {'Qt::Horizontal': QtWidgets.QFrame.HLine,
+KeyError: 'Qt::Orientation::Horizontal'
+

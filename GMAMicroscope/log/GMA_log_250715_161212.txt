@@ -1,0 +1,5 @@
+2025-07-15T16:12:15|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T16:12:15|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T17:29:29|INFO|FancyApp|on_close
+2025-07-15T17:29:29|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T17:29:29|INFO|FancyApp|disconnecting ads

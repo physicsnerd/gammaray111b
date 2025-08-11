@@ -1,0 +1,33 @@
+2025-07-15T16:10:05|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T16:10:05|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T16:10:28|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 38, in run
+    self.measurement._thread_run()
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 251, in _thread_run
+    self.run()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\scope_read.py", line 41, in run
+    self.update_display()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\scope_read.py", line 79, in update_display
+    self.plot_lines["y"].setData(self.data["y"])
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\pyqtgraph\graphicsItems\PlotDataItem.py", line 714, in setData
+    y = np.array(data)
+        ^^^^^^^^^^^^^^
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (1001,) + inhomogeneous part.
+
+2025-07-15T16:10:28|ERROR|ScopeRead|read_scope failed to update display: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (1001,) + inhomogeneous part.. Traceback (most recent call last):
+
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\measurement.py", line 672, in _on_display_update_timer
+    self.m.update_display()
+
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\measurements\scope_read.py", line 79, in update_display
+    self.plot_lines["y"].setData(self.data["y"])
+
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\pyqtgraph\graphicsItems\PlotDataItem.py", line 714, in setData
+    y = np.array(data)
+        ^^^^^^^^^^^^^^
+
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (1001,) + inhomogeneous part.
+
+2025-07-15T16:11:43|INFO|FancyApp|on_close
+2025-07-15T16:11:43|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T16:11:43|INFO|FancyApp|disconnecting ads

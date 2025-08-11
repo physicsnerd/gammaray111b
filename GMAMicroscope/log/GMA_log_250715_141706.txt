@@ -1,0 +1,11 @@
+2025-07-15T14:17:09|INFO|FancyApp|proposed values default_settings.ini
+2025-07-15T14:17:09|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-15T14:19:02|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\helper_funcs.py", line 188, in eventFilter
+    def eventFilter(self, obj, event):
+    
+KeyboardInterrupt
+
+2025-07-15T14:19:08|INFO|FancyApp|on_close
+2025-07-15T14:19:08|INFO|FancyApp|disconnecting ni_dac
+2025-07-15T14:19:08|INFO|FancyApp|disconnecting ads

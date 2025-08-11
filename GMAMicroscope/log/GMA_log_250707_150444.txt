@@ -1,0 +1,57 @@
+2025-07-07T15:04:45|INFO|FancyApp|proposed values default_settings.ini
+2025-07-07T15:04:45|INFO|FancyApp|settings loaded from default_settings.ini
+2025-07-07T15:05:05|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Physical channel name specified is invalid. Physical channel names are of the form <device name>/<physical channel name>, for example, dev1/ai0.
+
+Task Name: ni_dac
+Status Code: -201237
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:05:05|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Physical channel name specified is invalid. Physical channel names are of the form <device name>/<physical channel name>, for example, dev1/ai0.
+
+Task Name: ni_dac
+Status Code: -201237
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:05:05|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+ in function DAQmxStartTask
+2025-07-07T15:05:52|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: dev1
+
+Task Name: ni_dac
+Status Code: -200220
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:05:52|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: dev1
+
+Task Name: ni_dac
+Status Code: -200220
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:05:52|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+ in function DAQmxStartTask
+2025-07-07T15:06:01|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: dev1
+
+Task Name: ni_dac
+Status Code: -200220
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:06:01|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxCreateAOVoltageChan": Device identifier is invalid.
+
+Device Specified: dev1
+
+Task Name: ni_dac
+Status Code: -200220
+ in function DAQmxCreateAOVoltageChan
+2025-07-07T15:06:01|ERROR|ScopeFoundryHW.NIDAQ|Error calling "DAQmxStartTask": Specified operation cannot be performed when there are no channels in the task.
+
+Task Name: ni_dac
+Status Code: -200478
+ in function DAQmxStartTask
+2025-07-07T15:07:29|INFO|FancyApp|on_close
+2025-07-07T15:07:29|INFO|FancyApp|disconnecting ni_dac

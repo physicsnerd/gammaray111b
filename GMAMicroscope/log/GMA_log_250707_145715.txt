@@ -1,0 +1,12 @@
+2025-07-07T14:57:15|CRITICAL|root|Unhandled exception: Traceback (most recent call last):
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 47, in <module>
+    app = FancyApp(sys.argv)
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Auden\AppData\Local\Programs\Python\Python312\Lib\site-packages\ScopeFoundry\base_app\base_microscope_app.py", line 87, in __init__
+    self.setup()
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\fancy_app.py", line 23, in setup
+    from ScopeFoundryHW.NIDAQ import NIDAQHardware
+  File "c:\Users\Auden\Dropbox\PC (2)\Documents\Jupyter\phys 111b\Segre-Internship\GMAMicroscope\ScopeFoundryHW\NIDAQ.py", line 2, in <module>
+    from ni_dac_task import NI_DacTask
+ModuleNotFoundError: No module named 'ni_dac_task'
+
