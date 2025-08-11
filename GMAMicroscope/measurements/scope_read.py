@@ -18,30 +18,32 @@ class ScopeRead(Measurement):
 
         s = self.settings
         s.New("sampling_period", float, initial=60, unit="s")
-        s.New("sampling_wait", float, initial=0.1, unit="s")
+        s.New("buffer_size", int, initial=1000)
+        s.New("sampling_freq", float, initial=1e6, unit="Hz")
         #s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=False)
         #s.New("device", str, initial="ads")
         #s.New("bin_range", int, initial=2048) #why doesn't this work properly
         #self.data = {"y": np.ones(self.settings["N"])}
-        self.data = {"y": np.ones(int(self.settings["sampling_period"]))}
+        #self.data = {"y": np.ones(int(self.settings["sampling_period"]))}
+        self.data = {}
     
     def run(self):
         hw = self.app.hardware["ads"]
-        hw.open_scope()
+        sampling_freq = self.settings["sampling_freq"]
+        buffer_size = self.settings["buffer_size"]
+        hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
         buffer = hw.read_scope()
-        #x = range(len(buffer))
-        #self.data["x"] = x
-        self.data["y"] = buffer
+        self.data["y"] = np.array([])
+        self.data["x"] = np.array([])
+        loop_offset_time = 0
+        loop_start_time = time.time()
         for i in range(int(self.settings["sampling_period"])):
-            buffer = hw.read_scope()
-            #x = range(len(buffer))
-            #self.data["x"].append(x)
-            self.data["y"]= np.append(self.data["y"], buffer)
+            buffer, loop_offset_time = np.mean(hw.read_scope()), time.time() - loop_start_time
+            self.data["y"] = np.append(self.data["y"], buffer)
+            MS_CONVERSION = 1e3
+            self.data["x"] = np.append(self.data["x"], np.array([MS_CONVERSION*(loop_offset_time + i*buffer_size/sampling_freq)]))
             self.update_display()
-            self.set_progress(i * 100.0 / self.settings["sampling_period"])            
-            time.sleep(self.settings["sampling_wait"])
-            # break the loop if user desires.
             if self.interrupt_measurement_called:
                 break
 
@@ -76,7 +78,7 @@ class ScopeRead(Measurement):
         layout.addWidget(self.graphics_widget)
 
     def update_display(self):
-        self.plot_lines["y"].setData(self.data["y"])
+        self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
         #if "x" in self.data and "y" in self.data:
         #    x = self.data["x"]
         #    y = self.data["y"]
