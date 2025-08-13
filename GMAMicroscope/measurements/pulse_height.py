@@ -20,6 +20,7 @@ class PulseHeightAnalyze(Measurement):
 
         s = self.settings
         s.New("sampling_period", float, initial=0.01, unit="s")
+        s.New("threshold", float, initial=0.01, units="V")
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
         s.New("device", str, initial="ads")
@@ -37,6 +38,7 @@ class PulseHeightAnalyze(Measurement):
     
     def run_ads(self):
         hw = self.app.hardware["ads"]
+        noise_threshold = self.settings["threshold"]
 
         hw.open_scope()
         #hw.trigger_scope() ...why doesn't this work? can't read scope after being triggered
@@ -46,36 +48,38 @@ class PulseHeightAnalyze(Measurement):
         #self.update_display()
         values = []
 
-        for i in range(self.settings["N"]):
+        legit_data_points = 0
+        while legit_data_points <= self.settings["N"]:
             buffer = hw.read_scope()
             base = np.average(buffer[200:400])
             height = np.max(buffer[400:900])
-            values.append(int((height - base) * bit_res))
-            counts, bins = np.histogram(values, bins=range(bit_res))
-            self.data["x"] = bins
-            self.data["y"] = counts
-            buffer = np.array(buffer, dtype=np.float64)
+            if height >= noise_threshold:
+                legit_data_points += 1
+                values.append(int((height - base) * bit_res))
+                counts, bins = np.histogram(values, bins=range(bit_res))
+                self.data["x"] = bins
+                self.data["y"] = counts
+                buffer = np.array(buffer, dtype=np.float64)
 
-            if self.pulse_sum is None:
-                self.pulse_sum = np.zeros_like(buffer)
+                if self.pulse_sum is None:
+                    self.pulse_sum = np.zeros_like(buffer)
 
-            self.pulse_sum += buffer
-            self.pulse_count += 1
+                self.pulse_sum += buffer
+                self.pulse_count += 1
 
-            # Compute running average
-            running_avg = self.pulse_sum / self.pulse_count
+                # Compute running average
+                running_avg = self.pulse_sum / self.pulse_count
 
-            # Store for plotting
-            self.data["avg_pulse"] = running_avg
-            self.update_display()
-            #QtWidgets.QApplication.processEvents()
-            if i%10 == 0:
-                self.set_progress(i * 100.0 / self.settings["N"])
-                #print(i)
+                # Store for plotting
+                self.data["avg_pulse"] = running_avg
+                self.update_display()
+                #QtWidgets.QApplication.processEvents()
+                if legit_data_points % 10 == 0:
+                    self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
-            # break the loop if user desires.
-            if self.interrupt_measurement_called:
-                break
+                # break the loop if user desires.
+                if self.interrupt_measurement_called:
+                    break
         hw.close_scope()
         #plt.step(bins[2000:-1], counts[2000:], where="post")
         #plt.show()
