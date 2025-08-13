@@ -40,7 +40,7 @@ class ScopeRead(Measurement):
             MS_CONVERSION = 1e3
             self.data["x"] = np.append(self.data["x"], np.array([MS_CONVERSION*(loop_offset_time + i*buffer_size/sampling_freq)]))
             if i%10 == 0:
-                self.set_progress(i * 100.0 / self.settings["sampling_period"])
+                self.set_progress(i * 100.0 / self.settings["N"])
             self.update_display()
             if self.interrupt_measurement_called:
                 break
