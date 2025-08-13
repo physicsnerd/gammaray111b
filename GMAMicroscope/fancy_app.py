@@ -8,8 +8,8 @@ class FancyApp(BaseMicroscopeApp):
 
     def setup(self):
 
-        from ScopeFoundryHW.NIDAQ import NIDAQHardware
-        self.add_hardware(NIDAQHardware(self))
+        #from ScopeFoundryHW.NIDAQ import NIDAQHardware
+        #self.add_hardware(NIDAQHardware(self))
 
         from ScopeFoundryHW.ADS import ADSHardware
         self.add_hardware(ADSHardware(self))
