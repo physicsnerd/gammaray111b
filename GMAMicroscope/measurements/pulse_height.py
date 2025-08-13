@@ -20,7 +20,7 @@ class PulseHeightAnalyze(Measurement):
 
         s = self.settings
         s.New("sampling_period", float, initial=0.01, unit="s")
-        s.New("threshold", float, initial=0.01, units="V")
+        s.New("threshold", float, initial=0.01, unit="V")
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
         s.New("device", str, initial="ads")
