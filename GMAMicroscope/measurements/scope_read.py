@@ -17,15 +17,11 @@ class ScopeRead(Measurement):
         """
 
         s = self.settings
-        s.New("sampling_period", float, initial=60, unit="s")
         s.New("buffer_size", int, initial=1000)
         s.New("sampling_freq", float, initial=1e6, unit="Hz")
-        #s.New("N", int, initial=1001)
+        s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=False)
-        #s.New("device", str, initial="ads")
-        #s.New("bin_range", int, initial=2048) #why doesn't this work properly
         #self.data = {"y": np.ones(self.settings["N"])}
-        #self.data = {"y": np.ones(int(self.settings["sampling_period"]))}
         self.data = {}
     
     def run(self):
@@ -33,12 +29,12 @@ class ScopeRead(Measurement):
         sampling_freq = self.settings["sampling_freq"]
         buffer_size = self.settings["buffer_size"]
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
-        buffer = hw.read_scope()
+        #buffer = hw.read_scope()
         self.data["y"] = np.array([])
         self.data["x"] = np.array([])
         loop_offset_time = 0
         loop_start_time = time.time()
-        for i in range(int(self.settings["sampling_period"])):
+        for i in range(int(self.settings["N"])):
             buffer, loop_offset_time = np.mean(hw.read_scope()), time.time() - loop_start_time
             self.data["y"] = np.append(self.data["y"], buffer)
             MS_CONVERSION = 1e3
@@ -81,9 +77,3 @@ class ScopeRead(Measurement):
 
     def update_display(self):
         self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
-        #if "x" in self.data and "y" in self.data:
-        #    x = self.data["x"]
-        #    y = self.data["y"]
-        #    # Use midpoints of bins for bar positions
-        #    x_mid = 0.5 * (x[:-1] + x[1:])
-        #    self.bar_item.setOpts(x=x_mid, height=y, width=1.0)
