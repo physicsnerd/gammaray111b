@@ -19,8 +19,11 @@ class PulseHeightAnalyze(Measurement):
         """
 
         s = self.settings
-        s.New("sampling_period", float, initial=0.01, unit="s")
-        s.New("threshold", float, initial=0.01, unit="V")
+        #s.New("sampling_period", float, initial=0.01, unit="s")
+        s.New("buffer_size", int, initial=1000)
+        s.New("sampling_frequency", float, initial=1e6, unit="Hz")
+        s.New("threshold", float, initial=1.0, unit="mV")
+        s.New("bin_number", int, initial=1024)
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
         s.New("device", str, initial="ads")
@@ -39,27 +42,34 @@ class PulseHeightAnalyze(Measurement):
     def run_ads(self):
         hw = self.app.hardware["ads"]
         noise_threshold = self.settings["threshold"]
+        buffer_size = self.settings["buffer_size"]
+        sampling_frequency = self.settings["sampling_frequency"]
+        bin_number = self.settings["bin_number"]
+
+        MS_CONVERSION = 1e3
+        MV_CONVERSION = 1000
 
         hw.open_scope()
-        #hw.trigger_scope() ...why doesn't this work? can't read scope after being triggered
-        bit_res = 2048
-        #self.data["x"] = np.array([])
-        #self.data["y"] = np.array([])
-        #self.update_display()
+        #bit_res = 1024 HM CHECK THIS
         values = []
 
         legit_data_points = 0
+        self.data['deadtime'] = []
+        loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
-            buffer = hw.read_scope()
+            buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
+            self.data["deadtime_max"] = max(self.data["deadtime"])
+            self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
             base = np.average(buffer[200:400])
             height = np.max(buffer[400:900])
-            if height >= noise_threshold:
+            if (height-base) >= noise_threshold:
                 legit_data_points += 1
-                values.append(int((height - base) * bit_res))
-                counts, bins = np.histogram(values, bins=range(bit_res))
+                values.append(int((height - base) * bin_number))#bit_res)) CHECK THIS
+                counts, bins = np.histogram(values, bins=range(bin_number))
                 self.data["x"] = bins
                 self.data["y"] = counts
-                buffer = np.array(buffer, dtype=np.float64)
+                buffer = np.array(buffer, dtype=np.float64)/MV_CONVERSION
 
                 if self.pulse_sum is None:
                     self.pulse_sum = np.zeros_like(buffer)
@@ -69,39 +79,23 @@ class PulseHeightAnalyze(Measurement):
 
                 # Compute running average
                 running_avg = self.pulse_sum / self.pulse_count
+                print(running_avg)
 
                 # Store for plotting
                 self.data["avg_pulse"] = running_avg
+                #self.data["avg_pulse_x"] = np.array(range(self.data["avg_pulse"].size))
+                #print(self.data["avg_pulse"].size, MS_CONVERSION*buffer_size/sampling_frequency)
                 self.update_display()
-                #QtWidgets.QApplication.processEvents()
-                if legit_data_points % 10 == 0:
-                    self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
                 # break the loop if user desires.
                 if self.interrupt_measurement_called:
                     break
+            if legit_data_points % 10 == 0:
+                    self.set_progress(legit_data_points * 100.0 / self.settings["N"])
         hw.close_scope()
-        #plt.step(bins[2000:-1], counts[2000:], where="post")
-        #plt.show()
-        """
-        y = self.data["y"] = np.ones(self.settings["N"])
-        #self.data["y"] = hw.read_scope(wait=self.settings["sampling_period"])
-
-        for i in range(self.settings["N"]):
-            values = hw.read_scope()
-            y[i] = np.mean(values)
-
-            time.sleep(self.settings["sampling_period"])
-
-            self.set_progress(i * 100.0 / self.settings["N"])
-
-            # break the loop if user desires.
-            if self.interrupt_measurement_called:
-                break
-        """
 
         if self.settings["save_h5"]:
-            # saves data, closes file,
+            # saves data, closes file
             self.save_h5(data=self.data)
 
     def run_ni(self):
@@ -196,4 +190,5 @@ class PulseHeightAnalyze(Measurement):
             x_mid = 0.5 * (x[:-1] + x[1:])
             self.bar_item.setOpts(x=x_mid, height=y, width=1.0)
         if "avg_pulse" in self.data:
-            self.avg_curve.setData(self.data["avg_pulse"])
+            self.avg_curve.setData(y=self.data["avg_pulse"])
+            #self.avg_curve.setData(x=self.data["avg_pulse_x"], y=self.data["avg_pulse"])
