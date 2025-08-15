@@ -26,7 +26,7 @@ class PulseHeightAnalyze(Measurement):
         s.New("bin_number", int, initial=1024)
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
-        s.New("device", str, initial="ads")
+        #s.New("device", str, initial="ads")
         #s.New("bin_range", int, initial=2048) #why doesn't this work properly
         #self.data = {"y": np.ones(self.settings["N"])}
         self.data = {}
@@ -34,12 +34,6 @@ class PulseHeightAnalyze(Measurement):
         self.pulse_count = 0
     
     def run(self):
-        if self.settings.device == "ni":
-            self.run_ni()
-        else:
-            self.run_ads()
-    
-    def run_ads(self):
         hw = self.app.hardware["ads"]
         noise_threshold = self.settings["threshold"]
         buffer_size = self.settings["buffer_size"]
@@ -104,60 +98,6 @@ class PulseHeightAnalyze(Measurement):
         if self.settings["save_h5"]:
             # saves data, closes file
             self.save_h5(data=self.data)
-
-    def run_ni(self):
-        """
-        Runs when the measurement starts. Executes in a separate thread from the GUI.
-        It should not update the graphical interface directly and should focus only
-        on data acquisition.
-        """
-        # Prepare an array for data in memory.
-        #y = self.data["y"] = np.ones(self.settings["N"])
-        intermediate_values = np.ones(self.settings["N"])
-        bin_range = 2048
-        values = []
-
-        # Get a reference to the hardware
-        hw = self.app.hardware["ni_dac"]
-
-        # Sample the hardware for values N times
-        for i in range(self.settings["N"]):
-
-            # read data from device.
-            intermediate_values[i] = hw.settings.get_lq("dac_val").read_from_hardware()
-            #height = ...
-            #base = ...
-            #values.append(int((height - base) * bin_range))
-            #counts, bins = np.histogram(values, bins=range(bin_range))
-            #self.data["x"] = bins
-            #self.data["y"] = counts
-            self.update_display()
-            QtWidgets.QApplication.processEvents()
-
-            # wait for the sampling period.
-            time.sleep(self.settings["sampling_period"])
-
-
-
-            self.set_progress(i * 100.0 / self.settings["N"])
-
-            # break the loop if user desires.
-            if self.interrupt_measurement_called:
-                break
-
-        if self.settings["save_h5"]:
-            # saves data, closes file,
-            self.save_h5(data=self.data)
-
-            # ScopeFoundry 2.1 and later
-            # self.save_h5 also sets self.dataset_metadata
-            # which allows to save data in other formats
-            #import matplotlib.pyplot as plt
-
-            #plt.figure()
-            #plt.plot(y)
-            #plt.savefig(self.dataset_metadata.get_file_path(".png"))
-            #plt.close()
 
     def setup_figure(self):
         """
