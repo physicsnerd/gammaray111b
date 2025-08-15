@@ -49,7 +49,9 @@ class PulseHeightAnalyze(Measurement):
         MS_CONVERSION = 1e3
         MV_CONVERSION = 1000
 
-        hw.open_scope()
+        split_point = buffer_size - 100
+
+        hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_frequency)
         #bit_res = 1024 HM CHECK THIS
         values = []
 
@@ -61,8 +63,9 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
             self.data["deadtime_max"] = max(self.data["deadtime"])
             self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
-            base = np.average(buffer[200:400])
-            height = np.max(buffer[400:900])
+            self.data["deadtime_median"] = sorted(self.data["deadtime"])[int(len(self.data["deadtime"]/2))]
+            base = np.average(buffer[200:split_point/2])
+            height = np.max(buffer[split_point/2:split_point])
             if (height-base) >= noise_threshold:
                 legit_data_points += 1
                 values.append(int((height - base) * bin_number))#bit_res)) CHECK THIS
