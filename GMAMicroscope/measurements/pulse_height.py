@@ -66,7 +66,7 @@ class PulseHeightAnalyze(Measurement):
             if (height-base) >= noise_threshold:
                 legit_data_points += 1
                 values.append(int((height - base) * bin_number))#bit_res)) CHECK THIS
-                counts, bins = np.histogram(values, bins=range(bin_number))
+                counts, bins = np.histogram(values)#, bins=range(bin_number))
                 self.data["x"] = bins
                 self.data["y"] = counts
                 buffer = np.array(buffer, dtype=np.float64)/MV_CONVERSION
@@ -92,6 +92,10 @@ class PulseHeightAnalyze(Measurement):
                     break
             if legit_data_points % 10 == 0:
                     self.set_progress(legit_data_points * 100.0 / self.settings["N"])
+        counts, bins = np.histogram(values, bins=range(bin_number))
+        self.data["x"] = bins
+        self.data["y"] = counts
+        self.update_display()
         hw.close_scope()
 
         if self.settings["save_h5"]:
@@ -176,7 +180,7 @@ class PulseHeightAnalyze(Measurement):
 
         self.graphics_widget.nextRow()
         self.avg_plot = self.graphics_widget.addPlot(title="Average Pulse Shape")
-        self.avg_curve = self.avg_plot.plot(pen="y")  # yellow line
+        self.avg_curve = self.avg_plot.plot(pen="g")
 
         #bgi = pg.BarGraphItem(x0=x[:-1], x1=x[1:], height=y, pen='w', brush=(0,0,255,150))
         layout.addWidget(self.graphics_widget)
