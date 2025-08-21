@@ -61,10 +61,11 @@ class PulseHeightAnalyze(Measurement):
             if (height-base) >= noise_threshold:
                 legit_data_points += 1
                 self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
-                values.append(int((height - base) * bin_number))
+                values.append((height - base) * bin_number)
                 counts, bins = np.histogram(values)
                 self.data["x"] = bins
                 self.data["y"] = counts
+                self.data["raw_values"] = values
 
                 self.update_display()
 
