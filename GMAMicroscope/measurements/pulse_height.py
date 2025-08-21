@@ -70,7 +70,7 @@ class PulseHeightAnalyze(Measurement):
                 buffer = np.array(buffer, dtype=np.float64)/MV_CONVERSION
 
                 if self.pulse_sum is None:
-                    self.pulse_sum = np.zeros_like(buffer)
+                    self.pulse_sum = np.zeros_like(buffer[200:split_point])
 
                 self.pulse_sum += buffer[200:split_point]
                 self.pulse_count += 1
