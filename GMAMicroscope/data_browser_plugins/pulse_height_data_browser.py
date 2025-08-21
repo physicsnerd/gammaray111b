@@ -68,7 +68,7 @@ class PulseHeightDataBrowser(DataBrowserView):
                     self.x = np.arange(len(self.y) + 1)
                     print("Generated x:", self.x.shape)
                 
-                self.raw_data = group['raw_data'][()]
+                self.raw_data = group['raw_values'][()]
                 print("Loaded raw_data shape:", self.raw_data.shape)
 
                 # Metadata
