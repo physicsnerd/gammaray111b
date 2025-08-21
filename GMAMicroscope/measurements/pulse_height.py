@@ -7,6 +7,89 @@ from qtpy import QtCore, QtWidgets, QtGui
 
 from ScopeFoundry import Measurement, h5_io
 
+class GaugeWidget(QtWidgets.QWidget):
+    def __init__(self, minimum=0, maximum=1000, parent=None):
+        super().__init__(parent)
+        self._min = minimum
+        self._max = maximum
+        self._value = 0
+        self.setMinimumSize(200, 200)
+
+    def setRange(self, minimum, maximum):
+        self._min = minimum
+        self._max = maximum
+        self.update()
+
+    def setValue(self, value):
+        self._value = max(self._min, min(self._max, value))
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
+
+        rect = self.rect().adjusted(10, 10, -10, -10)
+        center = rect.center()
+        radius = min(rect.width(), rect.height()) / 2
+
+        # --- Draw colored arcs ---
+        pen = QtGui.QPen()
+        pen.setWidth(15)
+
+        # Green arc (low deadtime: 0–300)
+        pen.setColor(QtGui.QColor("green"))
+        painter.setPen(pen)
+        painter.drawArc(rect, 225*16, -108*16)  # 0–300 ms segment
+
+        # Yellow arc (medium: 300–700)
+        pen.setColor(QtGui.QColor("yellow"))
+        painter.setPen(pen)
+        painter.drawArc(rect, 117*16, -144*16)  # 300–700 ms segment
+
+        # Red arc (high: 700–1000)
+        pen.setColor(QtGui.QColor("red"))
+        painter.setPen(pen)
+        painter.drawArc(rect, -27*16, -108*16)  # 700–1000 ms segment
+
+        # --- Draw needle ---
+        angle_span = 270  # dial spans 270°
+        start_angle = 225
+        norm = (self._value - self._min) / (self._max - self._min)
+        angle = start_angle - norm * angle_span
+
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtGui.QColor("black"))
+        needle_length = radius * 0.75
+        needle = QtCore.QLineF.fromPolar(needle_length, angle)
+        needle.translate(center)
+        painter.drawLine(center, needle.p2())
+
+        # --- Draw labels ---
+        painter.setPen(QtGui.QPen(QtCore.Qt.black))
+        font = painter.font()
+        font.setPointSize(10)
+        painter.setFont(font)
+
+        # Min label
+        painter.drawText(
+            rect.adjusted(0, radius * 0.4, 0, 0),
+            QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom,
+            f"{self._min} ms",
+        )
+
+        # Mid label
+        painter.drawText(
+            rect,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom,
+            f"{(self._min + self._max) // 2} ms",
+        )
+
+        # Max label
+        painter.drawText(
+            rect.adjusted(0, radius * 0.4, 0, 0),
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom,
+            f"{self._max} ms",
+        )
 
 class PulseHeightAnalyze(Measurement):
 
@@ -54,10 +137,9 @@ class PulseHeightAnalyze(Measurement):
         loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
             buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
-            print(len(buffer))
             self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
-            self.data["deadtime_max"] = max(self.data["deadtime"])
-            self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
+            #self.data["deadtime_max"] = max(self.data["deadtime"])
+            #self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
             self.data["deadtime_median"] = sorted(self.data["deadtime"])[int(len(self.data["deadtime"])/2)]
             base = np.average(buffer[200:int(split_point/2)])
             height = np.max(buffer[int(split_point/2):split_point])
@@ -124,32 +206,14 @@ class PulseHeightAnalyze(Measurement):
         dial_container = QtWidgets.QWidget()
         dial_container.setLayout(dial_layout)
 
-        # QDial widget
-        self.deadtime_dial = QtWidgets.QDial()
-        self.deadtime_dial.setNotchesVisible(True)
-        self.deadtime_dial.setMinimum(0)
-        self.deadtime_dial.setMaximum(1000)  # scale ms range, adjust as needed
-        self.deadtime_dial.setEnabled(False)  # read-only look
+        self.deadtime_gauge = GaugeWidget(minimum=0, maximum=1000)
+        dial_layout.addWidget(self.deadtime_gauge, alignment=QtCore.Qt.AlignCenter)
 
         # Median display
         self.median_label = QtWidgets.QLabel("Median deadtime: N/A")
         self.median_label.setAlignment(QtCore.Qt.AlignCenter)
-
-        # Style the dial with green-yellow-red background
-        # (works by setting gradient in stylesheet)
-        self.deadtime_dial.setStyleSheet("""
-            QDial {
-                background: qconicalgradient(
-                    cx:0.5, cy:0.5, angle:90,
-                    stop:0 green, 
-                    stop:0.6 yellow, 
-                    stop:1 red
-                );
-            }
-        """)
-
-        dial_layout.addWidget(self.deadtime_dial, alignment=QtCore.Qt.AlignCenter)
         dial_layout.addWidget(self.median_label)
+
         layout.addWidget(dial_container)
 
     def update_display(self):
@@ -167,9 +231,7 @@ class PulseHeightAnalyze(Measurement):
             latest = self.data["deadtime"][-1]
             median = self.data["deadtime_median"]
 
-            # Map value into dial range (0–1000 ms scale here)
-            dial_value = min(max(int(latest), 0), self.deadtime_dial.maximum())
-            self.deadtime_dial.setValue(dial_value)
+            dial_value = min(max(int(latest), self.deadtime_gauge._min), self.deadtime_gauge._max)
+            self.deadtime_gauge.setValue(dial_value)
 
-            # Update label
             self.median_label.setText(f"Median deadtime: {median:.2f} ms")
