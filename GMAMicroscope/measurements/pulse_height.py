@@ -199,19 +199,19 @@ class PulseHeightAnalyze(Measurement):
         layout.addWidget(self.graphics_widget)
 
         # --- Add Deadtime Dial ---
-        dial_layout = QtWidgets.QVBoxLayout()
-        dial_container = QtWidgets.QWidget()
-        dial_container.setLayout(dial_layout)
+        #dial_layout = QtWidgets.QVBoxLayout()
+        #dial_container = QtWidgets.QWidget()
+        #dial_container.setLayout(dial_layout)
 
-        self.deadtime_gauge = GaugeWidget(minimum=0, maximum=50)
-        dial_layout.addWidget(self.deadtime_gauge, alignment=QtCore.Qt.AlignCenter)
+        #self.deadtime_gauge = GaugeWidget(minimum=0, maximum=50)
+        #dial_layout.addWidget(self.deadtime_gauge, alignment=QtCore.Qt.AlignCenter)
 
         # Median display
         self.median_label = QtWidgets.QLabel("Median deadtime: N/A")
         self.median_label.setAlignment(QtCore.Qt.AlignCenter)
-        dial_layout.addWidget(self.median_label)
+        #dial_layout.addWidget(self.median_label)
 
-        layout.addWidget(dial_container)
+        layout.addWidget(self.median_label)
 
     def update_display(self):
         if "x" in self.data and "y" in self.data:
@@ -225,10 +225,17 @@ class PulseHeightAnalyze(Measurement):
 
         # --- Update Dial & Median ---
         if "deadtime" in self.data and len(self.data["deadtime"]) > 0:
-            latest = self.data["deadtime"][-1]
+            #latest = self.data["deadtime"][-1]
             median = self.data["deadtime_median"]
 
-            dial_value = min(max(int(latest), self.deadtime_gauge._min), self.deadtime_gauge._max)
-            self.deadtime_gauge.setValue(dial_value)
+            #dial_value = min(max(int(latest), self.deadtime_gauge._min), self.deadtime_gauge._max)
+            #self.deadtime_gauge.setValue(dial_value)
+            if median >= 20:
+                color = "red"
+            elif median >= 10 and median < 20:
+                color = "yellow"
+            else:
+                color = "green"
 
-            self.median_label.setText(f"Median deadtime: {median:.2f} ms")
+            self.median_label.setText(f"Median deadtime: {median:.2f} ms", color=color)
+            #self.latest_label.setText(f"Latest deadtime: {latest:.2f} ms")
