@@ -52,6 +52,7 @@ class PulseHeightAnalyze(Measurement):
             data_points += 1
             buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
+            print(loop_deadtime)
             self.data['deadtime_mean'] += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
             self.data['deadtime_mean'] /= data_points
 
@@ -72,10 +73,10 @@ class PulseHeightAnalyze(Measurement):
                 break
             if legit_data_points % 10 == 0:
                 self.set_progress(legit_data_points * 100.0 / self.settings["N"])
-        counts, bins = np.histogram(values, bins=range(bin_number))
-        self.data["x"] = bins
-        self.data["y"] = counts
-        self.update_display()
+        #counts, bins = np.histogram(values, bins=range(bin_number))
+        #self.data["x"] = bins
+        #self.data["y"] = counts
+        #self.update_display()
         hw.close_scope()
 
         if self.settings["save_h5"]:
