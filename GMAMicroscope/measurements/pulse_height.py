@@ -33,6 +33,7 @@ class PulseHeightAnalyze(Measurement):
         bin_number = self.settings["bin_number"]
 
         MS_CONVERSION = 1e3
+        US_CONVERSION = 1e6
         MV_CONVERSION = 1000
 
         split_point = buffer_size - 100
@@ -51,7 +52,7 @@ class PulseHeightAnalyze(Measurement):
             data_points += 1
             buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
-            self.data['deadtime_mean'] += MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
+            self.data['deadtime_mean'] += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
             self.data['deadtime_mean'] /= data_points
 
             base = np.average(buffer[base_region])
@@ -119,11 +120,11 @@ class PulseHeightAnalyze(Measurement):
         if "deadtime_mean" in self.data:
             mean = self.data["deadtime_mean"]
 
-            if mean >= 20:
+            if mean >= 50:
                 color = "red"
-            elif mean >= 10 and mean < 20:
+            elif mean >= 25 and mean < 50:
                 color = "orange"
             else:
                 color = "green"
 
-            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
+            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} us</span>')
