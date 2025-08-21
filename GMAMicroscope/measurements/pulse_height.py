@@ -118,7 +118,7 @@ class PulseHeightAnalyze(Measurement):
             if median >= 20:
                 color = "red"
             elif median >= 10 and median < 20:
-                color = "yellow"
+                color = "orange"
             else:
                 color = "green"
 
