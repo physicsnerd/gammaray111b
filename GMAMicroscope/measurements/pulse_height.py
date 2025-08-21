@@ -36,37 +36,41 @@ class PulseHeightAnalyze(Measurement):
         MV_CONVERSION = 1000
 
         split_point = buffer_size - 100
+        base_region = slice(200, int(split_point/2))
+        height_region = slice(int(split_point/2), split_point)
+
 
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_frequency)
-        #bit_res = 1024 HM CHECK THIS
         values = []
 
         legit_data_points = 0
-        self.data['deadtime'] = []
+        data_points = 0
+        self.data['deadtime_mean'] = 0
         loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
+            data_points += 1
             buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
-            self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
-            self.data["deadtime_median"] = sorted(self.data["deadtime"])[int(len(self.data["deadtime"])/2)]
+            self.data['deadtime_mean'] += MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
+            self.data['deadtime_mean'] /= data_points
 
-            base = np.average(buffer[200:int(split_point/2)])
-            height = np.max(buffer[int(split_point/2):split_point])
+            base = np.average(buffer[base_region])
+            height = np.max(buffer[height_region])
             if (height-base) >= noise_threshold:
                 legit_data_points += 1
                 self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
-                values.append(int((height - base) * bin_number))#bit_res)) CHECK THIS
+                values.append(int((height - base) * bin_number))
                 counts, bins = np.histogram(values)#, bins=range(bin_number))
                 self.data["x"] = bins
                 self.data["y"] = counts
 
                 self.update_display()
 
-                # break the loop if user desires.
-                if self.interrupt_measurement_called:
-                    break
+            # break the loop if user desires.
+            if self.interrupt_measurement_called:
+                break
             if legit_data_points % 10 == 0:
-                    self.set_progress(legit_data_points * 100.0 / self.settings["N"])
+                self.set_progress(legit_data_points * 100.0 / self.settings["N"])
         counts, bins = np.histogram(values, bins=range(bin_number))
         self.data["x"] = bins
         self.data["y"] = counts
@@ -96,11 +100,11 @@ class PulseHeightAnalyze(Measurement):
         self.recent_curve = self.recent_plot.plot(pen="g")
         layout.addWidget(self.graphics_widget)
 
-        # Median display
-        self.median_label = QtWidgets.QLabel("Median deadtime: N/A")
-        self.median_label.setAlignment(QtCore.Qt.AlignCenter)
+        # Mean display
+        self.mean_label = QtWidgets.QLabel("Mean deadtime: N/A")
+        self.mean_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        layout.addWidget(self.median_label)
+        layout.addWidget(self.mean_label)
 
     def update_display(self):
         if "x" in self.data and "y" in self.data:
@@ -112,14 +116,14 @@ class PulseHeightAnalyze(Measurement):
         if "recent_pulse" in self.data:
             self.recent_curve.setData(y=self.data["recent_pulse"])
 
-        if "deadtime" in self.data and len(self.data["deadtime"]) > 0:
-            median = self.data["deadtime_median"]
+        if "deadtime_mean" in self.data:
+            mean = self.data["deadtime_mean"]
 
-            if median >= 20:
+            if mean >= 20:
                 color = "red"
-            elif median >= 10 and median < 20:
+            elif mean >= 10 and mean < 20:
                 color = "orange"
             else:
                 color = "green"
 
-            self.median_label.setText(f'<span style="color:{color}">Median deadtime: {median:.2f} ms</span>')
+            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
