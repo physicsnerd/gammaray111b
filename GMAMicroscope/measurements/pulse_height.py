@@ -1,18 +1,20 @@
 import time
-import numpy as np
-
+import math
 import numpy as np
 import pyqtgraph as pg
 from qtpy import QtCore, QtWidgets, QtGui
 
 from ScopeFoundry import Measurement, h5_io
 
+import math
+from PyQt5 import QtWidgets, QtGui, QtCore
+
 class GaugeWidget(QtWidgets.QWidget):
     def __init__(self, minimum=0, maximum=1000, parent=None):
         super().__init__(parent)
         self._min = minimum
         self._max = maximum
-        self._value = 0
+        self._value = minimum
         self.setMinimumSize(200, 200)
 
     def setRange(self, minimum, maximum):
@@ -28,7 +30,7 @@ class GaugeWidget(QtWidgets.QWidget):
         painter = QtGui.QPainter(self)
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
-        rect = self.rect().adjusted(10, 10, -10, -10)
+        rect = self.rect().adjusted(20, 20, -20, -20)
         center = rect.center()
         radius = min(rect.width(), rect.height()) / 2
 
@@ -36,33 +38,41 @@ class GaugeWidget(QtWidgets.QWidget):
         pen = QtGui.QPen()
         pen.setWidth(15)
 
-        # Green arc (low deadtime: 0–300)
+        # Dial covers 270° sweep, from 225° to -45°
+        # Green (0–300 ms, 30% of range)
         pen.setColor(QtGui.QColor("green"))
         painter.setPen(pen)
-        painter.drawArc(rect, 225*16, -108*16)  # 0–300 ms segment
+        painter.drawArc(rect, 225*16, -int(270*16*0.3))
 
-        # Yellow arc (medium: 300–700)
+        # Yellow (300–700 ms, 40% of range)
         pen.setColor(QtGui.QColor("yellow"))
         painter.setPen(pen)
-        painter.drawArc(rect, 117*16, -144*16)  # 300–700 ms segment
+        painter.drawArc(rect, (225 - 270*0.3)*16, -int(270*16*0.4))
 
-        # Red arc (high: 700–1000)
+        # Red (700–1000 ms, 30% of range)
         pen.setColor(QtGui.QColor("red"))
         painter.setPen(pen)
-        painter.drawArc(rect, -27*16, -108*16)  # 700–1000 ms segment
+        painter.drawArc(rect, (225 - 270*0.7)*16, -int(270*16*0.3))
 
         # --- Draw needle ---
-        angle_span = 270  # dial spans 270°
+        angle_span = 270
         start_angle = 225
         norm = (self._value - self._min) / (self._max - self._min)
         angle = start_angle - norm * angle_span
 
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtGui.QColor("black"))
+        rad = math.radians(angle)
         needle_length = radius * 0.75
-        needle = QtCore.QLineF.fromPolar(needle_length, angle)
-        needle.translate(center)
-        painter.drawLine(center, needle.p2())
+        x = center.x() + needle_length * math.cos(rad)
+        y = center.y() - needle_length * math.sin(rad)
+
+        painter.setPen(QtGui.QPen(QtCore.Qt.black, 3))
+        painter.drawLine(center, QtCore.QPointF(x, y))
+
+        # Center hub
+        painter.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        painter.setPen(QtCore.Qt.NoPen)
+        hub_radius = 6
+        painter.drawEllipse(center, hub_radius, hub_radius)
 
         # --- Draw labels ---
         painter.setPen(QtGui.QPen(QtCore.Qt.black))
@@ -70,25 +80,26 @@ class GaugeWidget(QtWidgets.QWidget):
         font.setPointSize(10)
         painter.setFont(font)
 
-        # Min label
+        # Min label (left)
         painter.drawText(
-            rect.adjusted(0, radius * 0.4, 0, 0),
+            rect.adjusted(0, radius*0.4, 0, 0),
             QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom,
-            f"{self._min} ms",
+            f"{self._min} ms"
         )
 
-        # Mid label
+        # Mid label (center bottom)
+        mid_val = (self._min + self._max) // 2
         painter.drawText(
             rect,
             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom,
-            f"{(self._min + self._max) // 2} ms",
+            f"{mid_val} ms"
         )
 
-        # Max label
+        # Max label (right)
         painter.drawText(
-            rect.adjusted(0, radius * 0.4, 0, 0),
+            rect.adjusted(0, radius*0.4, 0, 0),
             QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom,
-            f"{self._max} ms",
+            f"{self._max} ms"
         )
 
 class PulseHeightAnalyze(Measurement):
@@ -206,7 +217,7 @@ class PulseHeightAnalyze(Measurement):
         dial_container = QtWidgets.QWidget()
         dial_container.setLayout(dial_layout)
 
-        self.deadtime_gauge = GaugeWidget(minimum=0, maximum=1000)
+        self.deadtime_gauge = GaugeWidget(minimum=0, maximum=50)
         dial_layout.addWidget(self.deadtime_gauge, alignment=QtCore.Qt.AlignCenter)
 
         # Median display
