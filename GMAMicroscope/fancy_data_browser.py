@@ -7,6 +7,7 @@ from ScopeFoundry.helper_funcs import sibling_path
 
 #from data_browser_plugins import pulse_height_data_browser
 from data_browser_plugins.pulse_height_data_browser import PulseHeightDataBrowser
+from data_browser_plugins.scope_read_data_browser import ScopeReadDataBrowser
 
 class MyDataBrowser(DataBrowser):
     def setup(self):
@@ -15,6 +16,7 @@ class MyDataBrowser(DataBrowser):
 
         #from data_browser_plugins.pulse_height_data_browser import PulseHeightDataBrowser
         self.add_view(PulseHeightDataBrowser(self))
+        self.add_view(ScopeReadDataBrowser(self))
 
         self.add_view(H5TreeView(self))
         #self.add_view(RangedOptimizationH5View(self))
