@@ -141,24 +141,25 @@ class PulseHeightAnalyze(Measurement):
             height = np.max(buffer[int(split_point/2):split_point])
             if (height-base) >= noise_threshold:
                 legit_data_points += 1
+                self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
                 values.append(int((height - base) * bin_number))#bit_res)) CHECK THIS
                 counts, bins = np.histogram(values)#, bins=range(bin_number))
                 self.data["x"] = bins
                 self.data["y"] = counts
-                buffer = np.array(buffer, dtype=np.float64)/MV_CONVERSION
+                #buffer = np.array(buffer, dtype=np.float64)/MV_CONVERSION
 
-                if self.pulse_sum is None:
-                    self.pulse_sum = np.zeros_like(buffer[200:split_point])
+                #if self.pulse_sum is None:
+                #    self.pulse_sum = np.zeros_like(buffer[200:split_point])
 
-                self.pulse_sum += buffer[200:split_point]
-                self.pulse_count += 1
+                #self.pulse_sum += buffer[200:split_point]
+                #self.pulse_count += 1
 
                 # Compute running average
-                running_avg = self.pulse_sum / self.pulse_count
+                #running_avg = self.pulse_sum / self.pulse_count
                 #print(running_avg)
 
                 # Store for plotting
-                self.data["avg_pulse"] = running_avg
+                #self.data["avg_pulse"] = running_avg
                 #self.data["avg_pulse_x"] = np.array(range(self.data["avg_pulse"].size))
                 #print(self.data["avg_pulse"].size, MS_CONVERSION*buffer_size/sampling_frequency)
                 self.update_display()
@@ -193,8 +194,8 @@ class PulseHeightAnalyze(Measurement):
         self.plot.addItem(self.bar_item)
 
         self.graphics_widget.nextRow()
-        self.avg_plot = self.graphics_widget.addPlot(title="Average Pulse Shape")
-        self.avg_curve = self.avg_plot.plot(pen="g")
+        self.recent_plot = self.graphics_widget.addPlot(title="Most Recent Pulse Shape")
+        self.recent_curve = self.recent_plot.plot(pen="g")
         layout.addWidget(self.graphics_widget)
 
         # --- Add Deadtime Dial ---
@@ -219,8 +220,8 @@ class PulseHeightAnalyze(Measurement):
             x_mid = 0.5 * (x[:-1] + x[1:])
             self.bar_item.setOpts(x=x_mid, height=y, width=1.0)
 
-        if "avg_pulse" in self.data:
-            self.avg_curve.setData(y=self.data["avg_pulse"])
+        if "recent_pulse" in self.data:
+            self.recent_curve.setData(y=self.data["recent_pulse"])
 
         # --- Update Dial & Median ---
         if "deadtime" in self.data and len(self.data["deadtime"]) > 0:
