@@ -54,6 +54,7 @@ class PulseHeightAnalyze(Measurement):
         loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
             buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            print(len(buffer))
             self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
             self.data["deadtime_max"] = max(self.data["deadtime"])
             self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
@@ -71,12 +72,12 @@ class PulseHeightAnalyze(Measurement):
                 if self.pulse_sum is None:
                     self.pulse_sum = np.zeros_like(buffer)
 
-                self.pulse_sum += buffer
+                self.pulse_sum += buffer[200:split_point]
                 self.pulse_count += 1
 
                 # Compute running average
                 running_avg = self.pulse_sum / self.pulse_count
-                print(running_avg)
+                #print(running_avg)
 
                 # Store for plotting
                 self.data["avg_pulse"] = running_avg
