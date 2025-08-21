@@ -53,7 +53,6 @@ class PulseHeightAnalyze(Measurement):
             data_points += 1
             buffer, loop_deadtime, loop_deadtime_prev = MS_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
-            print(loop_deadtime)
             deadtime_total += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
             self.data['deadtime_mean'] = deadtime_total / data_points
 
