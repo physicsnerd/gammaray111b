@@ -47,14 +47,15 @@ class PulseHeightAnalyze(Measurement):
         legit_data_points = 0
         data_points = 0
         self.data['deadtime_mean'] = 0
+        deadtime_total = 0
         loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
             data_points += 1
-            buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            buffer, loop_deadtime, loop_deadtime_prev = MS_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
             print(loop_deadtime)
-            self.data['deadtime_mean'] += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
-            self.data['deadtime_mean'] /= data_points
+            deadtime_total += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
+            self.data['deadtime_mean'] = deadtime_total / data_points
 
             base = np.average(buffer[base_region])
             height = np.max(buffer[height_region])
