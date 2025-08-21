@@ -51,9 +51,9 @@ class PulseHeightAnalyze(Measurement):
         loop_deadtime_prev = time.time()
         while legit_data_points <= self.settings["N"]:
             data_points += 1
-            buffer, loop_deadtime, loop_deadtime_prev = MS_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
 
-            deadtime_total += US_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
+            deadtime_total += MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
             self.data['deadtime_mean'] = deadtime_total / data_points
 
             base = np.average(buffer[base_region])
@@ -62,7 +62,7 @@ class PulseHeightAnalyze(Measurement):
                 legit_data_points += 1
                 self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
                 values.append(int((height - base) * bin_number))
-                counts, bins = np.histogram(values)#, bins=range(bin_number))
+                counts, bins = np.histogram(values)
                 self.data["x"] = bins
                 self.data["y"] = counts
 
@@ -121,11 +121,11 @@ class PulseHeightAnalyze(Measurement):
         if "deadtime_mean" in self.data:
             mean = self.data["deadtime_mean"]
 
-            if mean >= 50:
+            if mean >= 20:
                 color = "red"
-            elif mean >= 25 and mean < 50:
+            elif mean >= 8 and mean < 20:
                 color = "orange"
             else:
                 color = "green"
 
-            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} us</span>')
+            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
