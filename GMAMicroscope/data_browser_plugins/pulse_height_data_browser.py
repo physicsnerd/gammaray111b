@@ -41,6 +41,7 @@ class PulseHeightDataBrowser(DataBrowserView):
 
         self.x = None
         self.y = None
+        self.raw_data = None
         self.filepath = None
         self.bar_item = None
     
@@ -66,6 +67,9 @@ class PulseHeightDataBrowser(DataBrowserView):
                 except KeyError:
                     self.x = np.arange(len(self.y) + 1)
                     print("Generated x:", self.x.shape)
+                
+                self.raw_data = group['raw_data'][()]
+                print("Loaded raw_data shape:", self.raw_data.shape)
 
                 # Metadata
                 if 'settings' in group:
@@ -90,14 +94,19 @@ class PulseHeightDataBrowser(DataBrowserView):
 
 
     def export_csv(self):
-        if self.x is None or self.y is None:
+        if self.x is None or self.y is None or self.raw_data is None:
             return
 
         base = os.path.splitext(os.path.basename(self.filepath))[0]
         default_csv_path = os.path.join(os.path.dirname(self.filepath), base + "_histogram.csv")
+        default_csv_path2 = os.path.join(os.path.dirname(self.filepath), base + "_raw_data.csv")
 
         fname, _ = QtWidgets.QFileDialog.getSaveFileName(
             self.ui, "Save CSV", default_csv_path, "CSV files (*.csv)")
+        
+        fname2, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self.ui, "Save CSV", default_csv_path2, "CSV files (*.csv)"
+        )
 
         if fname:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
@@ -106,6 +115,13 @@ class PulseHeightDataBrowser(DataBrowserView):
                 writer.writerow(['x_mid', 'count'])
                 for xi, yi in zip(x_mid, self.y):
                     writer.writerow([xi, yi])
+        
+        if fname2:
+            with open(fname, 'w', newline='') as f:
+                writer = csv.write(f)
+                writer.writerow(['pulse_height'])
+                for hi in self.raw_data:
+                    writer.writerow([hi])
     
     def is_file_supported(self, fname):
         print(f"Checking if file is supported: {fname}")
