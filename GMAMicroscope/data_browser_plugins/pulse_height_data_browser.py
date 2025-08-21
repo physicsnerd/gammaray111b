@@ -120,7 +120,7 @@ class PulseHeightDataBrowser(DataBrowserView):
         
         if fname2:
             with open(fname, 'w', newline='') as f:
-                writer = csv.write(f)
+                writer = csv.writer(f)
                 writer.writerow(['pulse_height'])
                 for hi in self.raw_data:
                     writer.writerow([hi])
