@@ -237,5 +237,5 @@ class PulseHeightAnalyze(Measurement):
             else:
                 color = "green"
 
-            self.median_label.setText(f"Median deadtime: {median:.2f} ms", color=color)
+            self.median_label.setText(f'<span style="color:{color}">Median deadtime: {median:.2f} ms</span>')
             #self.latest_label.setText(f"Latest deadtime: {latest:.2f} ms")
