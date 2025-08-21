@@ -57,7 +57,7 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime"].append(MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency))
             self.data["deadtime_max"] = max(self.data["deadtime"])
             self.data["deadtime_mean"] = sum(self.data["deadtime"])/len(self.data["deadtime"])
-            self.data["deadtime_median"] = sorted(self.data["deadtime"])[int(len(self.data["deadtime"]/2))]
+            self.data["deadtime_median"] = sorted(self.data["deadtime"])[int(len(self.data["deadtime"])/2)]
             base = np.average(buffer[200:split_point/2])
             height = np.max(buffer[split_point/2:split_point])
             if (height-base) >= noise_threshold:
