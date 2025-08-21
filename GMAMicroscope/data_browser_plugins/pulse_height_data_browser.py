@@ -108,6 +108,8 @@ class PulseHeightDataBrowser(DataBrowserView):
             self.ui, "Save CSV", default_csv_path2, "CSV files (*.csv)"
         )
 
+        print(f'saving to {fname} and {fname2}')
+
         if fname:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
             with open(fname, 'w', newline='') as f:
