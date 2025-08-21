@@ -58,11 +58,11 @@ class PulseHeightDataBrowser(DataBrowserView):
         with h5py.File(filepath, 'r') as f:
             try:
                 group = f['measurement/pulse_height_analyzer']
-                self.y = group['y'][()]
+                self.y = group['D y'][()]
                 print("Loaded y shape:", self.y.shape)
 
                 try:
-                    self.x = group['x'][()]
+                    self.x = group['D x'][()]
                 except KeyError:
                     self.x = np.arange(len(self.y) + 1)
                     print("Generated x:", self.x.shape)
