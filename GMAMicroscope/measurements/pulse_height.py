@@ -6,11 +6,8 @@ from qtpy import QtCore, QtWidgets, QtGui
 
 from ScopeFoundry import Measurement, h5_io
 
-import math
-from PyQt5 import QtWidgets, QtGui, QtCore
-
 class GaugeWidget(QtWidgets.QWidget):
-    def __init__(self, minimum=0, maximum=1000, parent=None):
+    def __init__(self, minimum=0, maximum=50, parent=None):
         super().__init__(parent)
         self._min = minimum
         self._max = maximum
@@ -34,32 +31,33 @@ class GaugeWidget(QtWidgets.QWidget):
         center = rect.center()
         radius = min(rect.width(), rect.height()) / 2
 
-        # --- Draw colored arcs ---
+        # dial covers 270° sweep from 225° (bottom-left) to -45° (bottom-right)
+        start_angle = 225
+        angle_span = 270
+
         pen = QtGui.QPen()
         pen.setWidth(15)
 
-        # Dial covers 270° sweep, from 225° to -45°
-        # Green (0–300 ms, 30% of range)
-        pen.setColor(QtGui.QColor("green"))
-        painter.setPen(pen)
-        painter.drawArc(rect, 225*16, -int(270*16*0.3))
+        # thresholds: 0–15 ms green, 15–35 ms yellow, 35–50 ms red
+        thresholds = [self._min, 15, 35, self._max]
+        colors = ["green", "yellow", "red"]
 
-        # Yellow (300–700 ms, 40% of range)
-        pen.setColor(QtGui.QColor("yellow"))
-        painter.setPen(pen)
-        painter.drawArc(rect, (225 - 270*0.3)*16, -int(270*16*0.4))
+        for i in range(3):
+            val1, val2 = thresholds[i], thresholds[i+1]
+            frac1 = (val1 - self._min) / (self._max - self._min)
+            frac2 = (val2 - self._min) / (self._max - self._min)
 
-        # Red (700–1000 ms, 30% of range)
-        pen.setColor(QtGui.QColor("red"))
-        painter.setPen(pen)
-        painter.drawArc(rect, (225 - 270*0.7)*16, -int(270*16*0.3))
+            angle1 = start_angle - frac1 * angle_span
+            angle2 = start_angle - frac2 * angle_span
+            span = (angle2 - angle1) * 16  # span in 1/16 deg units
 
-        # --- Draw needle ---
-        angle_span = 270
-        start_angle = 225
+            pen.setColor(QtGui.QColor(colors[i]))
+            painter.setPen(pen)
+            painter.drawArc(rect, int(angle1*16), int(span))
+
+        # --- Needle ---
         norm = (self._value - self._min) / (self._max - self._min)
         angle = start_angle - norm * angle_span
-
         rad = math.radians(angle)
         needle_length = radius * 0.75
         x = center.x() + needle_length * math.cos(rad)
@@ -68,39 +66,26 @@ class GaugeWidget(QtWidgets.QWidget):
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 3))
         painter.drawLine(center, QtCore.QPointF(x, y))
 
-        # Center hub
+        # hub
         painter.setBrush(QtGui.QBrush(QtCore.Qt.black))
         painter.setPen(QtCore.Qt.NoPen)
-        hub_radius = 6
-        painter.drawEllipse(center, hub_radius, hub_radius)
+        painter.drawEllipse(center, 6, 6)
 
-        # --- Draw labels ---
+        # --- Labels ---
         painter.setPen(QtGui.QPen(QtCore.Qt.black))
         font = painter.font()
         font.setPointSize(10)
         painter.setFont(font)
 
-        # Min label (left)
-        painter.drawText(
-            rect.adjusted(0, radius*0.4, 0, 0),
-            QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom,
-            f"{self._min} ms"
-        )
-
-        # Mid label (center bottom)
-        mid_val = (self._min + self._max) // 2
-        painter.drawText(
-            rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom,
-            f"{mid_val} ms"
-        )
-
-        # Max label (right)
-        painter.drawText(
-            rect.adjusted(0, radius*0.4, 0, 0),
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom,
-            f"{self._max} ms"
-        )
+        painter.drawText(rect.adjusted(0, radius*0.4, 0, 0),
+                         QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom,
+                         f"{self._min} ms")
+        painter.drawText(rect,
+                         QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom,
+                         f"{(self._min+self._max)//2} ms")
+        painter.drawText(rect.adjusted(0, radius*0.4, 0, 0),
+                         QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom,
+                         f"{self._max} ms")
 
 class PulseHeightAnalyze(Measurement):
 
