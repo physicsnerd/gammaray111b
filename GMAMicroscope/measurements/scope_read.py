@@ -21,7 +21,6 @@ class ScopeRead(Measurement):
         s.New("sampling_freq", float, initial=1e6, unit="Hz")
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=False)
-        #self.data = {"y": np.ones(self.settings["N"])}
         self.data = {}
     
     def run(self):
@@ -43,6 +42,7 @@ class ScopeRead(Measurement):
         loop_start = time.time()
         for i in range(int(self.settings["N"])):
             buffer, loop_deadtime = hw.read_scope(), time.time() - loop_start
+            print(max(buffer))
             start = i * buffer_size
             end = start + buffer_size
             self.data["y"][start:end] = buffer
@@ -67,8 +67,6 @@ class ScopeRead(Measurement):
         Create plots, controls widgets and buttons here.
         """
         self.ui = QtWidgets.QWidget()
-        #x = self.data["x"]
-        #y = self.data["y"]
 
         layout = QtWidgets.QVBoxLayout()
         self.ui.setLayout(layout)
@@ -79,10 +77,7 @@ class ScopeRead(Measurement):
         self.graphics_widget = pg.GraphicsLayoutWidget(border=(100, 100, 100))
         self.plot = self.graphics_widget.addPlot(title=self.name)
         self.plot_lines = {"y": self.plot.plot(pen="g")}
-        #self.bar_item = pg.BarGraphItem(x=[], height=[], width=1.0, brush='g')
-        #self.plot.addItem(self.bar_item)
 
-        #bgi = pg.BarGraphItem(x0=x[:-1], x1=x[1:], height=y, pen='w', brush=(0,0,255,150))
         layout.addWidget(self.graphics_widget)
 
         # Mean display
