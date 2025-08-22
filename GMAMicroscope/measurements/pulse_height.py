@@ -69,6 +69,7 @@ class PulseHeightAnalyze(Measurement):
 
             # --- pulse amplitudes ---
             amplitudes = height - base
+            print(amplitudes)
 
             # --- filter pulses above threshold ---
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
