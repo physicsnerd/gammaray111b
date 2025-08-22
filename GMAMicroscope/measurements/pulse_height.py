@@ -54,7 +54,7 @@ class PulseHeightAnalyze(Measurement):
             loop_deadtime = now - loop_deadtime_prev
             loop_deadtime_prev = now
 
-            deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / (buffer.size / buffer_size)
+            #deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / (buffer.size / buffer_size)
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- reshape into (n_chunks, split_point) ---
