@@ -58,6 +58,8 @@ class PulseHeightAnalyze(Measurement):
             n_chunks = buffer.size // buffer_size
             chunks = buffer[:n_chunks * buffer_size].reshape(n_chunks, buffer_size)
 
+            print(buffer.size)
+
             deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
             self.data["deadtime_mean"] = deadtime_total / data_points
 
@@ -137,9 +139,9 @@ class PulseHeightAnalyze(Measurement):
         if "deadtime_mean" in self.data:
             mean = self.data["deadtime_mean"]
 
-            if mean >= 20:
+            if mean >= 5:
                 color = "red"
-            elif mean >= 8 and mean < 20:
+            elif mean >= 0.5 and mean < 5:
                 color = "orange"
             else:
                 color = "green"
