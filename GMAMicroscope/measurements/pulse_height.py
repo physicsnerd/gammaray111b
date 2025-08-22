@@ -34,7 +34,7 @@ class PulseHeightAnalyze(Measurement):
         sampling_frequency = self.settings["sampling_frequency"]
         bin_number = self.settings["bin_number"]
 
-        US_CONVERSION = 1e3
+        US_CONVERSION = 1e6
         MV_CONVERSION = 1000
 
         #actually will have buffer size of buffer_size*1000 oops
@@ -140,9 +140,9 @@ class PulseHeightAnalyze(Measurement):
         if "deadtime_mean" in self.data:
             mean = self.data["deadtime_mean"]
 
-            if mean >= 5:
+            if mean >= 1000:
                 color = "red"
-            elif mean >= 0.5 and mean < 5:
+            elif mean >= 500 and mean < 1000:
                 color = "orange"
             else:
                 color = "green"
