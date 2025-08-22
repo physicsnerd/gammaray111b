@@ -16,7 +16,8 @@ class PulseHeightAnalyze(Measurement):
         """
 
         s = self.settings
-        s.New("buffer_size", int, initial=500)
+        s.New("buffer_size", int, initial=1000)
+        s.New("pulse_window_size", int, init=500)
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
         s.New("threshold", float, initial=1.0, unit="mV")
         s.New("bin_number", int, initial=1024)
@@ -29,13 +30,14 @@ class PulseHeightAnalyze(Measurement):
         hw = self.app.hardware["ads"]
         noise_threshold = self.settings["threshold"]
         buffer_size = self.settings["buffer_size"]
+        window_size = self.settings["pulse_window_size"]
         sampling_frequency = self.settings["sampling_frequency"]
         bin_number = self.settings["bin_number"]
 
         MS_CONVERSION = 1e3
         MV_CONVERSION = 1000
 
-        split_point = buffer_size - 100   # pulse window size
+        #actually will have buffer size of buffer_size*1000 oops
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_frequency)
 
         counts = np.zeros(bin_number, dtype=int)
@@ -55,10 +57,8 @@ class PulseHeightAnalyze(Measurement):
             loop_deadtime_prev = now
 
             # --- reshape into (n_chunks, split_point) ---
-            n_chunks = buffer.size // buffer_size
-            chunks = buffer[:n_chunks * buffer_size].reshape(n_chunks, buffer_size)
-
-            print(buffer.size)
+            n_chunks = buffer.size // window_size
+            chunks = buffer[:n_chunks * window_size].reshape(n_chunks, window_size)
 
             deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
             self.data["deadtime_mean"] = deadtime_total / data_points
@@ -88,7 +88,7 @@ class PulseHeightAnalyze(Measurement):
                 self.data["x"] = bins
                 self.data["y"] = counts
                 self.data["raw_values"] = counts.copy()
-                if legit_data_points % 5 == 0:
+                if legit_data_points % 10 == 0:
                     self.update_display()
 
             if self.interrupt_measurement_called:
