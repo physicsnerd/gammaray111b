@@ -30,7 +30,7 @@ class ScopeRead(Measurement):
         buffer_size = self.settings["buffer_size"]
         N = self.settings["N"]
 
-        MS_CONVERSION = 1e3
+        US_CONVERSION = 1e6
 
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
 
@@ -39,14 +39,16 @@ class ScopeRead(Measurement):
         self.data["x"] = np.zeros(total_points)
 
         loop_offset_time = 0
+        total_deadtime = 0
         loop_start_time = time.time()
         for i in range(int(self.settings["N"])):
             buffer, loop_offset_time = hw.read_scope(), time.time() - loop_start_time
             start = i * buffer_size
             end = start + buffer_size
             self.data["y"][start:end] = buffer
-            self.data["x"][start:end] = MS_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
-            #np.array([MS_CONVERSION*(loop_offset_time + i*buffer_size/sampling_freq)])
+            self.data["x"][start:end] = US_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
+            total_deadtime += loop_offset_time
+            self.data["mean_deadtime"] = total_deadtime / i
 
             if i%10 == 0:
                 self.set_progress(i * 100.0 / self.settings["N"])
@@ -84,6 +86,23 @@ class ScopeRead(Measurement):
         #bgi = pg.BarGraphItem(x0=x[:-1], x1=x[1:], height=y, pen='w', brush=(0,0,255,150))
         layout.addWidget(self.graphics_widget)
 
+        # Mean display
+        self.mean_label = QtWidgets.QLabel("Mean deadtime: N/A")
+        self.mean_label.setAlignment(QtCore.Qt.AlignCenter)
+
+        layout.addWidget(self.mean_label)
+
     def update_display(self):
         if "x" in self.data and "y" in self.data:
             self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
+        if "deadtime_mean" in self.data:
+            mean = self.data["deadtime_mean"]
+
+            if mean >= 20:
+                color = "red"
+            elif mean >= 8 and mean < 20:
+                color = "orange"
+            else:
+                color = "green"
+
+            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
