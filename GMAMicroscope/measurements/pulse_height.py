@@ -98,65 +98,6 @@ class PulseHeightAnalyze(Measurement):
         if self.settings["save_h5"]:
             self.save_h5(data=self.data)
     
-    def run(self):
-        hw = self.app.hardware["ads"]
-        noise_threshold = self.settings["threshold"]
-        buffer_size = self.settings["buffer_size"]
-        sampling_frequency = self.settings["sampling_frequency"]
-        bin_number = self.settings["bin_number"]
-
-        MS_CONVERSION = 1e3
-        US_CONVERSION = 1e6
-        MV_CONVERSION = 1000
-
-        split_point = buffer_size - 100
-        base_region = slice(200, int(split_point/2))
-        height_region = slice(int(split_point/2), split_point)
-
-
-        hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_frequency)
-        values = []
-
-        legit_data_points = 0
-        data_points = 0
-        self.data['deadtime_mean'] = 0
-        deadtime_total = 0
-        loop_deadtime_prev = time.time()
-        while legit_data_points <= self.settings["N"]:
-            data_points += 1
-            buffer, loop_deadtime, loop_deadtime_prev = MV_CONVERSION*hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
-
-            deadtime_total += MS_CONVERSION*(loop_deadtime + buffer_size/sampling_frequency)
-            self.data['deadtime_mean'] = deadtime_total / data_points
-
-            base = np.average(buffer[base_region])
-            height = np.max(buffer[height_region])
-            if np.abs(height-base) >= noise_threshold:
-                legit_data_points += 1
-                self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
-                values.append((height - base) * bin_number)
-                counts, bins = np.histogram(values)
-                self.data["x"] = bins
-                self.data["y"] = counts
-                self.data["raw_values"] = values
-
-                self.update_display()
-
-            # break the loop if user desires.
-            if self.interrupt_measurement_called:
-                break
-            if legit_data_points % 10 == 0:
-                self.set_progress(legit_data_points * 100.0 / self.settings["N"])
-        #counts, bins = np.histogram(values, bins=range(bin_number))
-        #self.data["x"] = bins
-        #self.data["y"] = counts
-        #self.update_display()
-        hw.close_scope()
-
-        if self.settings["save_h5"]:
-            # saves data, closes file
-            self.save_h5(data=self.data)
-
     def setup_figure(self):
         self.ui = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout()
