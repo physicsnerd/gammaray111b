@@ -58,7 +58,7 @@ class PulseHeightAnalyze(Measurement):
 
             base = np.average(buffer[base_region])
             height = np.max(buffer[height_region])
-            if (height-base) >= noise_threshold:
+            if np.abs(height-base) >= noise_threshold:
                 legit_data_points += 1
                 self.data["recent_pulse"] = np.array(buffer[200:split_point])/MV_CONVERSION
                 values.append((height - base) * bin_number)
