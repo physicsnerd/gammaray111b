@@ -50,7 +50,6 @@ class PulseHeightAnalyze(Measurement):
         while legit_data_points <= self.settings["N"]:
             data_points += 1
             buffer = np.array(hw.read_scope())
-            print(np.max(np.abs(buffer)))
 
             # measure deadtime
             now = time.time()
@@ -65,12 +64,12 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = chunks[:, 200:window_size//2].mean(axis=1)
-            height = chunks[:, window_size//2:].max(axis=1)
+            base = np.abs(chunks[:, 200:window_size//2]).mean(axis=1)
+            height = np.abs(chunks[:, window_size//2:]).max(axis=1)
 
             # --- pulse amplitudes ---
             amplitudes = height - base
-            #print(np.max(amplitudes))
+            print(np.max(amplitudes))
 
             # --- filter pulses above threshold ---
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
