@@ -41,9 +41,9 @@ class ScopeRead(Measurement):
 
         loop_offset_time = 0
         total_deadtime = 0
-        loop_start_time = time.time()
+        loop_deadtime_prev = time.time()
         for i in range(int(self.settings["N"])):
-            buffer, loop_offset_time = hw.read_scope(), time.time() - loop_start_time
+            buffer, loop_offset_time = hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
             start = i * buffer_size
             end = start + buffer_size
             self.data["y"][start:end] = buffer
