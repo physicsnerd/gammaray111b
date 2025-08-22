@@ -58,7 +58,7 @@ class PulseHeightAnalyze(Measurement):
             n_chunks = buffer.size // buffer_size
             chunks = buffer[:n_chunks * buffer_size].reshape(n_chunks, buffer_size)
 
-            deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / num_chunks
+            deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
