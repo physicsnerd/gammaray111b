@@ -64,7 +64,7 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = np.abs(chunks[:, 200:window_size//2]).mean(axis=1)
+            base = np.abs(chunks[:, :window_size//2]).mean(axis=1)
             height = np.abs(chunks[:, window_size//2:]).max(axis=1)
 
             # --- pulse amplitudes ---
@@ -82,7 +82,7 @@ class PulseHeightAnalyze(Measurement):
                 self.data["recent_pulse"] = chunks[last_idx, 200:]
 
                 # update histogram in one call
-                hist, bins = np.histogram(valid_amplitudes, bins=bin_number, range=(0, 1))
+                hist, bins = np.histogram(valid_amplitudes, bins=bin_number)
                 counts += hist
 
                 # update display
