@@ -16,7 +16,7 @@ class PulseHeightAnalyze(Measurement):
         """
 
         s = self.settings
-        s.New("buffer_size", int, initial=1000)
+        s.New("buffer_size", int, initial=500)
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
         s.New("threshold", float, initial=1.0, unit="mV")
         s.New("bin_number", int, initial=1024)
@@ -54,16 +54,16 @@ class PulseHeightAnalyze(Measurement):
             loop_deadtime = now - loop_deadtime_prev
             loop_deadtime_prev = now
 
-            #deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / (buffer.size / buffer_size)
-            self.data["deadtime_mean"] = deadtime_total / data_points
-
             # --- reshape into (n_chunks, split_point) ---
             n_chunks = buffer.size // buffer_size
             chunks = buffer[:n_chunks * buffer_size].reshape(n_chunks, buffer_size)
 
+            deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / num_chunks
+            self.data["deadtime_mean"] = deadtime_total / data_points
+
             # --- vectorized base + height ---
-            base = chunks[:, 200:split_point//2].mean(axis=1)
-            height = chunks[:, split_point//2:].max(axis=1)
+            base = chunks[:, 200:buffer_size//2].mean(axis=1)
+            height = chunks[:, buffer_size//2:].max(axis=1)
 
             # --- pulse amplitudes ---
             amplitudes = height - base
@@ -86,7 +86,8 @@ class PulseHeightAnalyze(Measurement):
                 self.data["x"] = bins
                 self.data["y"] = counts
                 self.data["raw_values"] = counts.copy()
-                self.update_display()
+                if legit_data_points % 5 == 0:
+                    self.update_display()
 
             if self.interrupt_measurement_called:
                 break
