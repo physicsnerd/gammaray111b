@@ -86,22 +86,22 @@ class ScopeRead(Measurement):
         layout.addWidget(self.graphics_widget)
 
         # Mean display
-        self.mean_label = QtWidgets.QLabel("Mean deadtime: N/A")
-        self.mean_label.setAlignment(QtCore.Qt.AlignCenter)
+        #self.mean_label = QtWidgets.QLabel("Mean deadtime: N/A")
+        #self.mean_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        layout.addWidget(self.mean_label)
+        #layout.addWidget(self.mean_label)
 
     def update_display(self):
         if "x" in self.data and "y" in self.data:
             self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
-        if "deadtime_mean" in self.data:
-            mean = self.data["deadtime_mean"]
+        #if "deadtime_mean" in self.data:
+        #    mean = self.data["deadtime_mean"]
 
-            if mean >= 20:
-                color = "red"
-            elif mean >= 8 and mean < 20:
-                color = "orange"
-            else:
-                color = "green"
+        #    if mean >= 20:
+        #        color = "red"
+        #    elif mean >= 8 and mean < 20:
+        #        color = "orange"
+        #    else:
+        #        color = "green"
 
-            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
+        #    self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
