@@ -40,16 +40,14 @@ class ScopeRead(Measurement):
         self.data["x"] = np.zeros(total_points)
 
         #loop_offset_time = 0
-        total_deadtime = 0
-        loop_deadtime_prev = time.time()
+        loop_start = time.time()
         for i in range(int(self.settings["N"])):
-            buffer, loop_deadtime, loop_deadtime_prev = hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
-            total_deadtime += loop_deadtime
+            buffer, loop_deadtime = hw.read_scope(), time.time() - loop_start()
             start = i * buffer_size
             end = start + buffer_size
             self.data["y"][start:end] = buffer
-            self.data["x"][start:end] = US_CONVERSION*(total_deadtime + np.arange(buffer_size)/sampling_freq)
-            self.data["deadtime_mean"] = MS_CONVERSION * total_deadtime / (i+1)
+            self.data["x"][start:end] = US_CONVERSION*(loop_deadtime + np.arange(buffer_size)/sampling_freq)
+            #self.data["deadtime_mean"] = MS_CONVERSION * loop_deadtime / (i+1)
 
             if i%10 == 0:
                 self.set_progress(i * 100.0 / self.settings["N"])
