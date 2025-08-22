@@ -49,7 +49,8 @@ class ScopeRead(Measurement):
             self.data["y"][start:end] = buffer
             self.data["x"][start:end] = US_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
             #total_deadtime += MS_CONVERSION*loop_offset_time
-            self.data["deadtime_mean"] = loop_offset_time#total_deadtime / (i+1)
+            print(loop_offset_time)
+            #self.data["deadtime_mean"] = loop_offset_time#total_deadtime / (i+1)
 
             if i%10 == 0:
                 self.set_progress(i * 100.0 / self.settings["N"])
