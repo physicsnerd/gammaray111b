@@ -82,7 +82,7 @@ class PulseHeightAnalyze(Measurement):
                 self.data["recent_pulse"] = chunks[last_idx, 200:]
 
                 # update histogram in one call
-                hist, bins = np.histogram(valid_amplitudes, bins=bin_number)
+                hist, bins = np.histogram(valid_amplitudes, bins=bin_number, range=(0, 1))
                 counts += hist
 
                 # update display
