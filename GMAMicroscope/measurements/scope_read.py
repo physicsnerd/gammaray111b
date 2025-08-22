@@ -30,6 +30,7 @@ class ScopeRead(Measurement):
         buffer_size = self.settings["buffer_size"]
         N = self.settings["N"]
 
+        MS_CONVERSION = 1e3
         US_CONVERSION = 1e6
 
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
@@ -47,7 +48,7 @@ class ScopeRead(Measurement):
             end = start + buffer_size
             self.data["y"][start:end] = buffer
             self.data["x"][start:end] = US_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
-            total_deadtime += loop_offset_time
+            total_deadtime += MS_CONVERSION*loop_offset_time
             self.data["deadtime_mean"] = total_deadtime / (i+1)
 
             if i%10 == 0:
