@@ -19,7 +19,7 @@ class PulseHeightAnalyze(Measurement):
         s.New("buffer_size", int, initial=1000)
         s.New("pulse_window_size", int, initial=500)
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
-        s.New("threshold", float, initial=1.0, unit="mV")
+        s.New("threshold", float, initial=0.05, unit="V")
         s.New("bin_number", int, initial=1024)
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
@@ -49,7 +49,7 @@ class PulseHeightAnalyze(Measurement):
 
         while legit_data_points <= self.settings["N"]:
             data_points += 1
-            buffer = np.array(MV_CONVERSION * hw.read_scope())
+            buffer = np.array(hw.read_scope())
             print(np.max(buffer))
 
             # measure deadtime
@@ -80,7 +80,7 @@ class PulseHeightAnalyze(Measurement):
 
                 # keep most recent pulse trace
                 last_idx = np.where(np.abs(amplitudes) >= noise_threshold)[0][-1]
-                self.data["recent_pulse"] = chunks[last_idx, 200:] / MV_CONVERSION
+                self.data["recent_pulse"] = chunks[last_idx, 200:]
 
                 # update histogram in one call
                 hist, bins = np.histogram(valid_amplitudes, bins=bin_number, range=(0, 1))
