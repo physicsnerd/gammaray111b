@@ -47,7 +47,7 @@ class PulseHeightAnalyze(Measurement):
 
         while legit_data_points <= self.settings["N"]:
             data_points += 1
-            buffer = MV_CONVERSION * hw.read_scope()
+            buffer = np.array(MV_CONVERSION * hw.read_scope())
 
             # measure deadtime
             now = time.time()
@@ -58,7 +58,7 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- reshape into (n_chunks, split_point) ---
-            n_chunks = len(buffer) // buffer_size
+            n_chunks = buffer.size // buffer_size
             chunks = buffer[:n_chunks * split_point].reshape(n_chunks, buffer_size)
 
             # --- vectorized base + height ---
