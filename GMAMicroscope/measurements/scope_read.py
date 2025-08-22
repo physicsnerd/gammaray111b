@@ -39,17 +39,18 @@ class ScopeRead(Measurement):
         self.data["y"] = np.zeros(total_points)
         self.data["x"] = np.zeros(total_points)
 
-        loop_offset_time = 0
+        #loop_offset_time = 0
         total_deadtime = 0
         loop_deadtime_prev = time.time()
         for i in range(int(self.settings["N"])):
-            buffer, loop_offset_time, loop_deadtime_prev = hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            buffer, loop_deadtime, loop_deadtime_prev = hw.read_scope(), time.time() - loop_deadtime_prev, time.time()
+            total_deadtime += loop_deadtime
             start = i * buffer_size
             end = start + buffer_size
             self.data["y"][start:end] = buffer
-            self.data["x"][start:end] = US_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
+            self.data["x"][start:end] = US_CONVERSION*(total_deadtime + np.arange(buffer_size)/sampling_freq)
             #total_deadtime += MS_CONVERSION*loop_offset_time
-            print(loop_offset_time)
+            print(loop_deadtime)
             #self.data["deadtime_mean"] = loop_offset_time#total_deadtime / (i+1)
 
             if i%10 == 0:
