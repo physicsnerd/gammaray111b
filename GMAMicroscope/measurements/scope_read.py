@@ -28,16 +28,26 @@ class ScopeRead(Measurement):
         hw = self.app.hardware["ads"]
         sampling_freq = self.settings["sampling_freq"]
         buffer_size = self.settings["buffer_size"]
+        N = self.settings["N"]
+
+        MS_CONVERSION = 1e3
+
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
-        self.data["y"] = np.array([])
-        self.data["x"] = np.array([])
+
+        total_points = N * buffer_size
+        self.data["y"] = np.zeros(total_points)
+        self.data["x"] = np.zeros(total_points)
+
         loop_offset_time = 0
         loop_start_time = time.time()
         for i in range(int(self.settings["N"])):
-            buffer, loop_offset_time = np.mean(hw.read_scope()), time.time() - loop_start_time
-            self.data["y"] = np.append(self.data["y"], buffer)
-            MS_CONVERSION = 1e3
-            self.data["x"] = np.append(self.data["x"], np.array([MS_CONVERSION*(loop_offset_time + i*buffer_size/sampling_freq)]))
+            buffer, loop_offset_time = hw.read_scope(), time.time() - loop_start_time
+            start = i * buffer_size
+            end = start + buffer_size
+            self.data["y"][start:end] = buffer
+            self.data["x"][start:end] = MS_CONVERSION*(loop_offset_time + np.arange(buffer_size)/sampling_freq)
+            #np.array([MS_CONVERSION*(loop_offset_time + i*buffer_size/sampling_freq)])
+
             if i%10 == 0:
                 self.set_progress(i * 100.0 / self.settings["N"])
             self.update_display()
