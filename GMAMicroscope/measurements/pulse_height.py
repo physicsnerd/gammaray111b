@@ -34,7 +34,7 @@ class PulseHeightAnalyze(Measurement):
         sampling_frequency = self.settings["sampling_frequency"]
         bin_number = self.settings["bin_number"]
 
-        MS_CONVERSION = 1e3
+        US_CONVERSION = 1e3
         MV_CONVERSION = 1000
 
         #actually will have buffer size of buffer_size*1000 oops
@@ -60,7 +60,7 @@ class PulseHeightAnalyze(Measurement):
             n_chunks = buffer.size // window_size
             chunks = buffer[:n_chunks * window_size].reshape(n_chunks, window_size)
 
-            deadtime_total += MS_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
+            deadtime_total += US_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
@@ -147,4 +147,4 @@ class PulseHeightAnalyze(Measurement):
             else:
                 color = "green"
 
-            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} ms</span>')
+            self.mean_label.setText(f'<span style="color:{color}">Mean deadtime: {mean:.2f} us</span>')
