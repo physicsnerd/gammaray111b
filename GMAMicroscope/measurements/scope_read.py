@@ -29,7 +29,6 @@ class ScopeRead(Measurement):
         sampling_freq = self.settings["sampling_freq"]
         buffer_size = self.settings["buffer_size"]
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_freq)
-        #buffer = hw.read_scope()
         self.data["y"] = np.array([])
         self.data["x"] = np.array([])
         loop_offset_time = 0
@@ -76,4 +75,5 @@ class ScopeRead(Measurement):
         layout.addWidget(self.graphics_widget)
 
     def update_display(self):
-        self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
+        if "x" in self.data and "y" in self.data:
+            self.plot_lines["y"].setData(x=self.data["x"], y=self.data["y"])
