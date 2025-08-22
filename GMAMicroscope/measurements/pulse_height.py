@@ -49,9 +49,8 @@ class PulseHeightAnalyze(Measurement):
 
         while legit_data_points <= self.settings["N"]:
             data_points += 1
-            buffer = hw.read_scope()
-            print(max(buffer))
-            buffer = np.array(buffer)
+            buffer = np.array(hw.read_scope(channel=1))
+            print(np.max(buffer))
 
             # measure deadtime
             now = time.time()
