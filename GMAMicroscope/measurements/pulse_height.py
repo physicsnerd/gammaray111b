@@ -59,7 +59,7 @@ class PulseHeightAnalyze(Measurement):
 
             # --- reshape into (n_chunks, split_point) ---
             n_chunks = buffer.size // buffer_size
-            chunks = buffer[:n_chunks * split_point].reshape(n_chunks, buffer_size)
+            chunks = buffer[:n_chunks * buffer_size].reshape(n_chunks, buffer_size)
 
             # --- vectorized base + height ---
             base = chunks[:, 200:split_point//2].mean(axis=1)
