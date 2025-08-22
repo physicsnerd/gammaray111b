@@ -50,6 +50,7 @@ class PulseHeightAnalyze(Measurement):
         while legit_data_points <= self.settings["N"]:
             data_points += 1
             buffer = np.array(MV_CONVERSION * hw.read_scope())
+            print(np.max(buffer))
 
             # measure deadtime
             now = time.time()
@@ -69,7 +70,7 @@ class PulseHeightAnalyze(Measurement):
 
             # --- pulse amplitudes ---
             amplitudes = height - base
-            print(np.max(amplitudes))
+            #print(np.max(amplitudes))
 
             # --- filter pulses above threshold ---
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
