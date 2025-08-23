@@ -33,6 +33,7 @@ class PulseHeightAnalyze(Measurement):
         window_size = self.settings["pulse_window_size"]
         sampling_frequency = self.settings["sampling_frequency"]
         bin_number = self.settings["bin_number"]
+        N = self.settings["N"]
 
         US_CONVERSION = 1e6
         MV_CONVERSION = 1000
@@ -40,14 +41,14 @@ class PulseHeightAnalyze(Measurement):
         #actually will have buffer size of buffer_size*1000 oops
         hw.open_scope(buffer_size=buffer_size, sample_freq=sampling_frequency)
 
-        counts = np.zeros(bin_number, dtype=int)
+        raw_data = np.zeros(N)
 
         legit_data_points = 0
         data_points = 0
         deadtime_total = 0
         loop_deadtime_prev = time.time()
 
-        while legit_data_points <= self.settings["N"]:
+        while legit_data_points <= N:
             data_points += 1
             buffer = np.array(hw.read_scope())
 
@@ -75,6 +76,7 @@ class PulseHeightAnalyze(Measurement):
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
 
             if valid_amplitudes.size > 0:
+                raw_data[legit_data_points - 1:valid_amplitudes.size] = valid_amplitudes
                 legit_data_points += valid_amplitudes.size
 
                 # keep most recent pulse trace
@@ -82,19 +84,17 @@ class PulseHeightAnalyze(Measurement):
                 self.data["recent_pulse"] = chunks[last_idx, :]
 
                 # update histogram in one call
-                hist, bins = np.histogram(valid_amplitudes, bins=bin_number)
-                counts += hist
+                hist, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
 
                 # update display
                 self.data["x"] = bins
-                self.data["y"] = counts
-                self.data["raw_values"] = counts.copy()
-                if legit_data_points % 10 == 0:
-                    self.update_display()
+                self.data["y"] = hist
+                self.data["raw_values"] = raw_data
 
             if self.interrupt_measurement_called:
                 break
-            if legit_data_points % 10 == 0:
+            if legit_data_points % 5 == 0:
+                self.update_display()
                 self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
         hw.close_scope()
