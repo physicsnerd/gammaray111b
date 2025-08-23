@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import pyqtgraph as pg
+from numpy.lib.stride_tricks import as_strided
 from qtpy import QtCore, QtWidgets
 
 from ScopeFoundry import Measurement, h5_io
@@ -59,7 +60,9 @@ class PulseHeightAnalyze(Measurement):
 
             # --- reshape into (n_chunks, split_point) ---
             n_chunks = buffer.size // window_size
-            chunks = buffer[:n_chunks * window_size].reshape(n_chunks, window_size)
+            #chunks = buffer[:n_chunks * window_size].reshape(n_chunks, window_size)
+            chunks = as_strided(buffer, shape=(n_chunks, window_size),
+                    strides=(buffer.strides[0]*window_size, buffer.strides[0]))
 
             deadtime_total += US_CONVERSION * (loop_deadtime + buffer.size / sampling_frequency) / n_chunks
             self.data["deadtime_mean"] = deadtime_total / data_points
@@ -70,13 +73,12 @@ class PulseHeightAnalyze(Measurement):
 
             # --- pulse amplitudes ---
             amplitudes = height - base
-            #print(np.max(amplitudes))
 
             # --- filter pulses above threshold ---
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
 
             if valid_amplitudes.size > 0:
-                raw_data[legit_data_points - 1:valid_amplitudes.size] = valid_amplitudes
+                raw_data[legit_data_points:legit_data_points + valid_amplitudes.size - 1] = valid_amplitudes
                 legit_data_points += valid_amplitudes.size
 
                 # keep most recent pulse trace
@@ -86,7 +88,7 @@ class PulseHeightAnalyze(Measurement):
             if self.interrupt_measurement_called:
                 break
 
-            if legit_data_points % 5 == 0:
+            if legit_data_points % 5 == 0 and legit_data_points > 1:
                 counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
                 self.data["x"] = bins
                 self.data["y"] = counts
