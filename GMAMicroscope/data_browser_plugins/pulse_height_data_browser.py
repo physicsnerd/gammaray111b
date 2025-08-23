@@ -87,7 +87,7 @@ class PulseHeightDataBrowser(DataBrowserView):
 
         if self.x is not None and self.y is not None:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
-            bin_width = (np.max(self.x) - np.min(self.x)) / self.settings["bin_number"]
+            bin_width = (np.max(self.x) - np.min(self.x)) / 1024 #FIX, need to get bin_number somehow
             print("x_mid shape:", x_mid.shape)
             print("y shape:", self.y.shape)
             self.bar_item = pg.BarGraphItem(x=x_mid, height=self.y, width=bin_width, brush='g')
