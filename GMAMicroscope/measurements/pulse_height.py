@@ -83,21 +83,18 @@ class PulseHeightAnalyze(Measurement):
                 last_idx = np.where(np.abs(amplitudes) >= noise_threshold)[0][-1]
                 self.data["recent_pulse"] = chunks[last_idx, :]
 
-                # update histogram in one call
-                hist, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
-
-                # update display
-                self.data["x"] = bins
-                self.data["y"] = hist
-                self.data["raw_values"] = raw_data
-
             if self.interrupt_measurement_called:
                 break
+
             if legit_data_points % 5 == 0:
+                counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
+                self.data["x"] = bins
+                self.data["y"] = counts
                 self.update_display()
                 self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
         hw.close_scope()
+        self.data["raw_values"] = raw_data
 
         if self.settings["save_h5"]:
             self.save_h5(data=self.data)
