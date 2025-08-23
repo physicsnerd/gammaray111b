@@ -3,6 +3,7 @@ import h5py
 import pyqtgraph as pg
 from qtpy import QtWidgets
 from ScopeFoundry.data_browser import DataBrowserView
+from itertools import zip_longest
 import csv
 import datetime
 import os
@@ -119,16 +120,11 @@ class PulseHeightDataBrowser(DataBrowserView):
 
         base = os.path.splitext(os.path.basename(self.filepath))[0]
         default_csv_path = os.path.join(os.path.dirname(self.filepath), base + "_histogram.csv")
-        default_csv_path2 = os.path.join(os.path.dirname(self.filepath), base + "_raw_data.csv")
 
         fname, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self.ui, "Save Histogram CSV", default_csv_path, "CSV files (*.csv)")
-        
-        fname2, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self.ui, "Save Raw Data CSV", default_csv_path2, "CSV files (*.csv)"
-        )
+            self.ui, "Save CSV", default_csv_path, "CSV files (*.csv)")
 
-        print(f'saving to {fname} and {fname2}')
+        print(f'saving to {fname}')
 
         # add provenance info
         provenance_lines = [
@@ -154,29 +150,10 @@ class PulseHeightDataBrowser(DataBrowserView):
                     writer.writerow([f"# {line}"])
                 writer.writerow([])  # blank line
 
-                # histogram data
-                writer.writerow(['x_mid', 'count'])
-                for xi, yi in zip(x_mid, self.y):
-                    writer.writerow([xi, yi])
-        
-        # ---- RAW DATA CSV WITH METADATA HEADER ----
-        if fname2:
-            with open(fname2, 'w', newline='') as f:
-                writer = csv.writer(f)
-
-                #add original filepath, datetime
-                for line in provenance_lines:
-                    writer.writerow([f"# {line}"])
-
-                # write metadata as commented header
-                for line in meta_text:
-                    writer.writerow([f"# {line}"])
-                writer.writerow([])  # blank line
-
-                # raw data values
-                writer.writerow(['pulse_height'])
-                for hi in self.raw_data:
-                    writer.writerow([hi])
+                # histogram data and raw height data
+                writer.writerow(['x_mid', 'count', 'raw_heights'])
+                export_data = zip_longest(*[x_mid, self.y, self.raw_data], fillvalue="")
+                writer.writerows(export_data)
 
     def is_file_supported(self, fname):
         print(f"Checking if file is supported: {fname}")

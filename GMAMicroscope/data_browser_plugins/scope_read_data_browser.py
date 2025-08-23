@@ -4,6 +4,7 @@ import pyqtgraph as pg
 from qtpy import QtWidgets
 from ScopeFoundry.data_browser import DataBrowserView
 import csv
+import datetime
 import os
 
 class ScopeReadDataBrowser(DataBrowserView):
@@ -70,12 +71,25 @@ class ScopeReadDataBrowser(DataBrowserView):
                 # Metadata
                 if 'settings' in group:
                     meta_lines = []
-                    for key, val in group['settings'].items():
-                        if isinstance(val, h5py.Dataset):
-                            val_str = val[()]
-                            if isinstance(val_str, bytes):
-                                val_str = val_str.decode()
-                            meta_lines.append(f"{key}: {val_str}")
+
+                    settings_group = group['settings']
+
+                    # 1. Datasets inside "settings"
+                    for key, ds in settings_group.items():
+                        try:
+                            val = ds[()]
+                            if isinstance(val, (bytes, np.bytes_)):
+                                val = val.decode()
+                            meta_lines.append(f"{key}: {val}")
+                        except Exception as e:
+                            meta_lines.append(f"{key}: <unreadable> ({e})")
+
+                    # 2. Attributes inside "settings"
+                    for key, val in settings_group.attrs.items():
+                        if isinstance(val, (bytes, np.bytes_)):
+                            val = val.decode()
+                        meta_lines.append(f"{key} (attr): {val}")
+
                     self.metadata_box.setPlainText("\n".join(meta_lines))
             except Exception as e:
                 print("Failed to load data:", e)
@@ -83,7 +97,6 @@ class ScopeReadDataBrowser(DataBrowserView):
 
         if self.x is not None and self.y is not None:
             self.plot_lines["y"].setData(x=self.x, y=self.y)
-
 
     def export_csv(self):
         if self.x is None or self.y is None:
@@ -95,13 +108,35 @@ class ScopeReadDataBrowser(DataBrowserView):
         fname, _ = QtWidgets.QFileDialog.getSaveFileName(
             self.ui, "Save CSV", default_csv_path, "CSV files (*.csv)")
 
+        print(f'saving to {fname}')
+
+        # add provenance info
+        provenance_lines = [
+            f"source_file: {os.path.basename(self.filepath)}",
+            f"export_timestamp: {datetime.datetime.now().isoformat(timespec='seconds')}"
+        ]
+
+        # grab metadata lines
+        meta_text = self.metadata_box.toPlainText().splitlines()
+
+        # ---- HISTOGRAM CSV WITH METADATA HEADER ----
         if fname:
-            x_mid = 0.5 * (self.x[:-1] + self.x[1:])
             with open(fname, 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['x', 'y'])
-                for xi, yi in zip(self.x, self.y):
-                    writer.writerow([xi, yi])
+
+                #add original filepath, datetime
+                for line in provenance_lines:
+                    writer.writerow([f"# {line}"])
+
+                # write metadata as commented header
+                for line in meta_text:
+                    writer.writerow([f"# {line}"])
+                writer.writerow([])  # blank line
+
+                # histogram data and raw height data
+                writer.writerow(['x_mid', 'count', 'raw_heights'])
+                export_data = zip(self.x, self.y)
+                writer.writerows(export_data)
     
     def is_file_supported(self, fname):
         print(f"Checking if file is supported: {fname}")
