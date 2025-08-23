@@ -87,9 +87,10 @@ class PulseHeightDataBrowser(DataBrowserView):
 
         if self.x is not None and self.y is not None:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
+            bin_width = (np.max(self.x) - np.min(self.x)) / self.settings["bin_number"]
             print("x_mid shape:", x_mid.shape)
             print("y shape:", self.y.shape)
-            self.bar_item = pg.BarGraphItem(x=x_mid, height=self.y, width=1.0, brush='g')
+            self.bar_item = pg.BarGraphItem(x=x_mid, height=self.y, width=bin_width, brush='g')
             self.plot.addItem(self.bar_item)
 
 
@@ -119,7 +120,7 @@ class PulseHeightDataBrowser(DataBrowserView):
                     writer.writerow([xi, yi])
         
         if fname2:
-            with open(fname, 'w', newline='') as f:
+            with open(fname2, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow(['pulse_height'])
                 for hi in self.raw_data:

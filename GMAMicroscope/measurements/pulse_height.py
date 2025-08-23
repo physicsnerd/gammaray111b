@@ -18,9 +18,9 @@ class PulseHeightAnalyze(Measurement):
 
         s = self.settings
         s.New("buffer_size", int, initial=1000)
-        s.New("pulse_window_size", int, initial=500)
+        s.New("pulse_window_size", int, initial=20)
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
-        s.New("threshold", float, initial=0.25, unit="V")
+        s.New("threshold", float, initial=1.00, unit="V")
         s.New("bin_number", int, initial=1024)
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
@@ -78,7 +78,7 @@ class PulseHeightAnalyze(Measurement):
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
 
             if valid_amplitudes.size > 0:
-                raw_data[legit_data_points:legit_data_points + valid_amplitudes.size - 1] = valid_amplitudes
+                raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes
                 legit_data_points += valid_amplitudes.size
 
                 # keep most recent pulse trace
@@ -140,9 +140,9 @@ class PulseHeightAnalyze(Measurement):
         if "deadtime_mean" in self.data:
             mean = self.data["deadtime_mean"]
 
-            if mean >= 1000:
+            if mean >= 100:
                 color = "red"
-            elif mean >= 500 and mean < 1000:
+            elif mean >= 75 and mean < 100:
                 color = "orange"
             else:
                 color = "green"
