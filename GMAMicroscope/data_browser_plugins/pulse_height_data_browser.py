@@ -4,6 +4,7 @@ import pyqtgraph as pg
 from qtpy import QtWidgets
 from ScopeFoundry.data_browser import DataBrowserView
 import csv
+import datetime
 import os
 
 class PulseHeightDataBrowser(DataBrowserView):
@@ -42,6 +43,7 @@ class PulseHeightDataBrowser(DataBrowserView):
         self.x = None
         self.y = None
         self.raw_data = None
+        self.bin_number = None
         self.filepath = None
         self.bar_item = None
     
@@ -74,12 +76,27 @@ class PulseHeightDataBrowser(DataBrowserView):
                 # Metadata
                 if 'settings' in group:
                     meta_lines = []
-                    for key, val in group['settings'].items():
-                        if isinstance(val, h5py.Dataset):
-                            val_str = val[()]
-                            if isinstance(val_str, bytes):
-                                val_str = val_str.decode()
-                            meta_lines.append(f"{key}: {val_str}")
+
+                    settings_group = group['settings']
+
+                    # 1. Datasets inside "settings"
+                    for key, ds in settings_group.items():
+                        try:
+                            val = ds[()]
+                            if isinstance(val, (bytes, np.bytes_)):
+                                val = val.decode()
+                            meta_lines.append(f"{key}: {val}")
+                        except Exception as e:
+                            meta_lines.append(f"{key}: <unreadable> ({e})")
+
+                    # 2. Attributes inside "settings"
+                    for key, val in settings_group.attrs.items():
+                        if isinstance(val, (bytes, np.bytes_)):
+                            val = val.decode()
+                        if key == "bin_number":
+                            self.bin_number = int(val)
+                        meta_lines.append(f"{key} (attr): {val}")
+
                     self.metadata_box.setPlainText("\n".join(meta_lines))
             except Exception as e:
                 print("Failed to load data:", e)
@@ -87,12 +104,14 @@ class PulseHeightDataBrowser(DataBrowserView):
 
         if self.x is not None and self.y is not None:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
-            bin_width = (np.max(self.x) - np.min(self.x)) / 1024 #FIX, need to get bin_number somehow
+            if not self.bin_number:
+                self.bin_number = 1
+                print('Bin number did not load properly. Defaulting to 1.')
+            bin_width = (np.max(self.x) - np.min(self.x)) / self.bin_number
             print("x_mid shape:", x_mid.shape)
             print("y shape:", self.y.shape)
             self.bar_item = pg.BarGraphItem(x=x_mid, height=self.y, width=bin_width, brush='g')
             self.plot.addItem(self.bar_item)
-
 
     def export_csv(self):
         if self.x is None or self.y is None or self.raw_data is None:
@@ -103,29 +122,62 @@ class PulseHeightDataBrowser(DataBrowserView):
         default_csv_path2 = os.path.join(os.path.dirname(self.filepath), base + "_raw_data.csv")
 
         fname, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self.ui, "Save CSV", default_csv_path, "CSV files (*.csv)")
+            self.ui, "Save Histogram CSV", default_csv_path, "CSV files (*.csv)")
         
         fname2, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self.ui, "Save CSV", default_csv_path2, "CSV files (*.csv)"
+            self.ui, "Save Raw Data CSV", default_csv_path2, "CSV files (*.csv)"
         )
 
         print(f'saving to {fname} and {fname2}')
 
+        # add provenance info
+        provenance_lines = [
+            f"source_file: {os.path.basename(self.filepath)}",
+            f"export_timestamp: {datetime.datetime.now().isoformat(timespec='seconds')}"
+        ]
+
+        # grab metadata lines
+        meta_text = self.metadata_box.toPlainText().splitlines()
+
+        # ---- HISTOGRAM CSV WITH METADATA HEADER ----
         if fname:
             x_mid = 0.5 * (self.x[:-1] + self.x[1:])
             with open(fname, 'w', newline='') as f:
                 writer = csv.writer(f)
+
+                #add original filepath, datetime
+                for line in provenance_lines:
+                    writer.writerow([f"# {line}"])
+
+                # write metadata as commented header
+                for line in meta_text:
+                    writer.writerow([f"# {line}"])
+                writer.writerow([])  # blank line
+
+                # histogram data
                 writer.writerow(['x_mid', 'count'])
                 for xi, yi in zip(x_mid, self.y):
                     writer.writerow([xi, yi])
         
+        # ---- RAW DATA CSV WITH METADATA HEADER ----
         if fname2:
             with open(fname2, 'w', newline='') as f:
                 writer = csv.writer(f)
+
+                #add original filepath, datetime
+                for line in provenance_lines:
+                    writer.writerow([f"# {line}"])
+
+                # write metadata as commented header
+                for line in meta_text:
+                    writer.writerow([f"# {line}"])
+                writer.writerow([])  # blank line
+
+                # raw data values
                 writer.writerow(['pulse_height'])
                 for hi in self.raw_data:
                     writer.writerow([hi])
-    
+
     def is_file_supported(self, fname):
         print(f"Checking if file is supported: {fname}")
         try:
