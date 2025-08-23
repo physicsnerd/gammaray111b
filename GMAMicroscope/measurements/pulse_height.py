@@ -19,7 +19,7 @@ class PulseHeightAnalyze(Measurement):
         s.New("buffer_size", int, initial=1000)
         s.New("pulse_window_size", int, initial=500)
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
-        s.New("threshold", float, initial=0.05, unit="V")
+        s.New("threshold", float, initial=0.25, unit="V")
         s.New("bin_number", int, initial=1024)
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
@@ -64,12 +64,12 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = np.abs(chunks[:, 200:window_size//2]).mean(axis=1)
+            base = np.abs(chunks[:, :window_size//2]).mean(axis=1)
             height = np.abs(chunks[:, window_size//2:]).max(axis=1)
 
             # --- pulse amplitudes ---
             amplitudes = height - base
-            print(np.max(amplitudes))
+            #print(np.max(amplitudes))
 
             # --- filter pulses above threshold ---
             valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
@@ -79,10 +79,10 @@ class PulseHeightAnalyze(Measurement):
 
                 # keep most recent pulse trace
                 last_idx = np.where(np.abs(amplitudes) >= noise_threshold)[0][-1]
-                self.data["recent_pulse"] = chunks[last_idx, 200:]
+                self.data["recent_pulse"] = chunks[last_idx, :]
 
                 # update histogram in one call
-                hist, bins = np.histogram(valid_amplitudes, bins=bin_number, range=(0, 1))
+                hist, bins = np.histogram(valid_amplitudes, bins=bin_number)
                 counts += hist
 
                 # update display
@@ -132,7 +132,8 @@ class PulseHeightAnalyze(Measurement):
             x = self.data["x"]
             y = self.data["y"]
             x_mid = 0.5 * (x[:-1] + x[1:])
-            self.bar_item.setOpts(x=x_mid, height=y, width=1.0)
+            bin_width = (np.max(x) - np.min(x)) / self.settings["bin_number"]
+            self.bar_item.setOpts(x=x_mid, height=y, width=bin_width)
 
         if "recent_pulse" in self.data:
             self.recent_curve.setData(y=self.data["recent_pulse"])
