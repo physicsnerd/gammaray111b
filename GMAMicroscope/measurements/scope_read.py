@@ -70,7 +70,7 @@ class ScopeRead(Measurement):
         layout = QtWidgets.QVBoxLayout()
         self.ui.setLayout(layout)
         layout.addWidget(
-            self.settings.New_UI(include=("sampling_period", "sampling_wait", "save_h5"))
+            self.settings.New_UI(include=("N", "save_h5"))
         )
         layout.addWidget(self.new_start_stop_button())
         self.graphics_widget = pg.GraphicsLayoutWidget(border=(100, 100, 100))
