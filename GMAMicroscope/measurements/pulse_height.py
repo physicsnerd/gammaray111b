@@ -68,14 +68,14 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = np.abs(chunks[:, :window_size//2]).mean(axis=1)
-            height = np.abs(chunks[:, window_size//2:]).max(axis=1)
+            base = chunks[:, window_size//10:9*window_size//10].min(axis=1)#remove indexing on these two?
+            height = chunks[:, window_size//10:9*window_size//10].max(axis=1)
 
             # --- pulse amplitudes ---
-            amplitudes = height - base
+            amplitudes = np.abs(height - base)
 
             # --- filter pulses above threshold ---
-            valid_amplitudes = amplitudes[np.abs(amplitudes) >= noise_threshold]
+            valid_amplitudes = amplitudes[amplitudes >= noise_threshold]
 
             if valid_amplitudes.size > 0:
                 raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes
