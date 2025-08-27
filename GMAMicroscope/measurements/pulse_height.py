@@ -92,7 +92,7 @@ class PulseHeightAnalyze(Measurement):
                 counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
                 self.data["x"] = bins
                 self.data["y"] = counts
-                self.update_display()
+                #self.update_display()
                 self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
         hw.close_scope()

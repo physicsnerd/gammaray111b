@@ -50,7 +50,7 @@ class ScopeRead(Measurement):
 
             if i%10 == 0:
                 self.set_progress(i * 100.0 / self.settings["N"])
-            self.update_display()
+            #self.update_display()
             if self.interrupt_measurement_called:
                 break
 
