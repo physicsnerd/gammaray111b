@@ -66,7 +66,7 @@ class ScopeReadDataBrowser(DataBrowserView):
                     self.x = group['x'][()]
                     print("Loaded x shape:", self.x.shape)
                 except KeyError:
-                    self.x = np.arange(len(self.y) + 1)
+                    self.x = np.arange(len(self.y))
                     print("Generated x:", self.x.shape)
 
                 # Metadata
@@ -135,7 +135,7 @@ class ScopeReadDataBrowser(DataBrowserView):
                 writer.writerow([])  # blank line
 
                 # histogram data and raw height data
-                writer.writerow(['x_mid', 'count', 'raw_heights'])
+                writer.writerow(['x', 'y'])
                 export_data = zip(self.x, self.y)
                 writer.writerows(export_data)
     
