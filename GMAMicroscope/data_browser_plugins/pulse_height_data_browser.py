@@ -174,7 +174,7 @@ class PulseHeightDataBrowser(DataBrowserView):
 
                 # raw data values
                 writer.writerow(['pulse_height'])
-                writer.writerows(self.raw_data)
+                writer.writerows(zip(self.raw_data))
 
     def is_file_supported(self, fname):
         print(f"Checking if file is supported: {fname}")
