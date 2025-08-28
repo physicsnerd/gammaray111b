@@ -54,7 +54,7 @@ class ScopeReadDataBrowser(DataBrowserView):
         print("Loading:", filepath)
         self.filepath = filepath
         self.metadata_box.clear()
-        self.plot.clear()
+        self.plot_lines["y"].setData([])
 
         with h5py.File(filepath, 'r') as f:
             try:
@@ -64,6 +64,7 @@ class ScopeReadDataBrowser(DataBrowserView):
 
                 try:
                     self.x = group['x'][()]
+                    print("Loaded x shape:", self.x.shape)
                 except KeyError:
                     self.x = np.arange(len(self.y) + 1)
                     print("Generated x:", self.x.shape)
