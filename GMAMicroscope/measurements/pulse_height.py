@@ -22,6 +22,7 @@ class PulseHeightAnalyze(Measurement):
         s.New("sampling_frequency", float, initial=1e6, unit="Hz")
         s.New("threshold", float, initial=1.00, unit="V")
         s.New("bin_number", int, initial=1024)
+        s.New("max_val", float, initial=5.00, unit="V")
         s.New("N", int, initial=1001)
         s.New("save_h5", bool, initial=True)
         #self.data = {"y": np.ones(self.settings["N"])}
@@ -34,6 +35,7 @@ class PulseHeightAnalyze(Measurement):
         window_size = self.settings["pulse_window_size"]
         sampling_frequency = self.settings["sampling_frequency"]
         bin_number = self.settings["bin_number"]
+        max_val = self.settings["max_val"]
         N = self.settings["N"]
 
         US_CONVERSION = 1e6
@@ -68,14 +70,15 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = chunks[:, window_size//10:9*window_size//10].min(axis=1)#remove indexing on these two?
+            base = chunks[:, window_size//10:9*window_size//10].mean(axis=1)#remove indexing on these two?
             height = chunks[:, window_size//10:9*window_size//10].max(axis=1)
 
             # --- pulse amplitudes ---
             amplitudes = np.abs(height - base)
 
-            # --- filter pulses above threshold ---
+            # --- filter pulses above threshold and below max ---
             valid_amplitudes = amplitudes[amplitudes >= noise_threshold]
+            valid_amplitudes = valid_amplitudes[valid_amplitudes <= max_val]
 
             if valid_amplitudes.size > 0:
                 raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes
@@ -89,7 +92,7 @@ class PulseHeightAnalyze(Measurement):
                 break
 
             if legit_data_points % 5 == 0 and legit_data_points > 1:
-                counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number)
+                counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number, range=(noise_threshold, max_val))
                 self.data["x"] = bins
                 self.data["y"] = counts
                 #self.update_display()
@@ -107,7 +110,7 @@ class PulseHeightAnalyze(Measurement):
         self.ui.setLayout(layout)
 
         layout.addWidget(
-            self.settings.New_UI(include=("threshold", "N", "bin_number", "save_h5"))
+            self.settings.New_UI(include=("threshold", "N", "bin_number", "max_val", "save_h5"))
         )
         layout.addWidget(self.new_start_stop_button())
         self.graphics_widget = pg.GraphicsLayoutWidget(border=(100, 100, 100))
