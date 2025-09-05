@@ -70,7 +70,7 @@ class PulseHeightAnalyze(Measurement):
             self.data["deadtime_mean"] = deadtime_total / data_points
 
             # --- vectorized base + height ---
-            base = chunks[:, window_size//10:9*window_size//10].mean(axis=1)#remove indexing on these two?
+            base = chunks[:, window_size//10:9*window_size//10].mean(axis=1)
             height = chunks[:, window_size//10:9*window_size//10].max(axis=1)
 
             # --- pulse amplitudes ---
@@ -81,7 +81,6 @@ class PulseHeightAnalyze(Measurement):
             valid_amplitudes = valid_amplitudes[valid_amplitudes <= max_val]
 
             if valid_amplitudes.size > 0:
-                #print(legit_data_points, valid_amplitudes.size, raw_data.size)
                 end = min(legit_data_points + valid_amplitudes.size, raw_data.size)
                 raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes[:end - legit_data_points]
                 legit_data_points += valid_amplitudes.size
@@ -97,7 +96,6 @@ class PulseHeightAnalyze(Measurement):
                 counts, bins = np.histogram(raw_data[:legit_data_points - 1], bins=bin_number, range=(noise_threshold, max_val))
                 self.data["x"] = bins
                 self.data["y"] = counts
-                #self.update_display()
                 self.set_progress(legit_data_points * 100.0 / self.settings["N"])
 
         hw.close_scope()
