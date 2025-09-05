@@ -17,9 +17,9 @@ class PulseHeightAnalyze(Measurement):
         """
 
         s = self.settings
-        s.New("buffer_size", int, initial=1000)
-        s.New("pulse_window_size", int, initial=20)
-        s.New("sampling_frequency", float, initial=1e6, unit="Hz")
+        s.New("buffer_size", int, initial=8000)
+        s.New("pulse_window_size", int, initial=400)
+        s.New("sampling_frequency", float, initial=20e6, unit="Hz")
         s.New("threshold", float, initial=1.00, unit="V")
         s.New("bin_number", int, initial=1024)
         s.New("max_val", float, initial=5.00, unit="V")
