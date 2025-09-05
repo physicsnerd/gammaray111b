@@ -81,8 +81,9 @@ class PulseHeightAnalyze(Measurement):
             valid_amplitudes = valid_amplitudes[valid_amplitudes <= max_val]
 
             if valid_amplitudes.size > 0:
-                print(legit_data_points, valid_amplitudes.size, raw_data.size)
-                raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes
+                #print(legit_data_points, valid_amplitudes.size, raw_data.size)
+                end = min(legit_data_points + valid_amplitudes.size, raw_data.size)
+                raw_data[legit_data_points:legit_data_points + valid_amplitudes.size] = valid_amplitudes[:end - legit_data_points]
                 legit_data_points += valid_amplitudes.size
 
                 # keep most recent pulse trace
