@@ -59,6 +59,10 @@ class LiveHistogram(QWidget):
         self.reset_btn.clicked.connect(self.reset_data)
         layout.addWidget(self.reset_btn)
 
+        # Point count label
+        self.count_label = QLabel("N points: 0")
+        layout.addWidget(self.count_label)
+
         # Matplotlib figure
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
@@ -80,6 +84,7 @@ class LiveHistogram(QWidget):
             self.file = open(self.filepath, "r")
             self.file_position = 0
             self.data = []
+            self.update_count_label()
 
     def reset_data(self):
         """Clear stored data and reset histogram."""
@@ -91,6 +96,10 @@ class LiveHistogram(QWidget):
         ax.set_xlabel("Value")
         ax.set_ylabel("Frequency")
         self.canvas.draw()
+        self.update_count_label()
+    
+    def update_count_label(self):
+        self.count_label.setText(f"Points histogrammed: {len(self.data)}")
 
     def update_plot(self):
         if not self.file:
@@ -112,6 +121,7 @@ class LiveHistogram(QWidget):
 
             if new_data:
                 self.data.extend(new_data)
+                self.update_count_label()
 
         except Exception as e:
             print(f"Error reading file: {e}")
