@@ -33,18 +33,18 @@ class LiveHistogram(QWidget):
         controls = QHBoxLayout()
         self.bin_label = QLabel("Bins:")
         self.bin_input = QSpinBox()
-        self.bin_input.setRange(1, 1000)
-        self.bin_input.setValue(50)
+        self.bin_input.setRange(1, 10000)
+        self.bin_input.setValue(1024)
 
         self.min_label = QLabel("Min:")
         self.min_input = QDoubleSpinBox()
         self.min_input.setRange(-1e9, 1e9)
-        self.min_input.setValue(0.0)
+        self.min_input.setValue(1.0)
 
         self.max_label = QLabel("Max:")
         self.max_input = QDoubleSpinBox()
         self.max_input.setRange(-1e9, 1e9)
-        self.max_input.setValue(100.0)
+        self.max_input.setValue(5.0)
 
         controls.addWidget(self.bin_label)
         controls.addWidget(self.bin_input)
@@ -127,7 +127,7 @@ class LiveHistogram(QWidget):
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         ax.hist(self.data, bins=bins, range=(vmin, vmax),
-                color="skyblue", edgecolor="black")
+                color="blue", edgecolor="blue")
         ax.set_title("Live Histogram")
         ax.set_xlabel("Value")
         ax.set_ylabel("Frequency")
