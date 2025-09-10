@@ -128,9 +128,9 @@ class LiveHistogram(QWidget):
         ax = self.figure.add_subplot(111)
         ax.hist(self.data, bins=bins, range=(vmin, vmax),
                 color="blue", edgecolor="blue")
-        ax.set_title("Live Histogram")
-        ax.set_xlabel("Value")
-        ax.set_ylabel("Frequency")
+        ax.set_title("Pulse Height Analyzer")
+        ax.set_xlabel("Voltage (V)")
+        ax.set_ylabel("Counts")
         self.canvas.draw()
 
 
