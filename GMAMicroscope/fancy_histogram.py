@@ -99,7 +99,7 @@ class LiveHistogram(QWidget):
         self.update_count_label()
     
     def update_count_label(self):
-        self.count_label.setText(f"Points histogrammed: {len(self.data)}")
+        self.count_label.setText(f"N points: {len(self.data)}")
 
     def update_plot(self):
         if not self.file:
